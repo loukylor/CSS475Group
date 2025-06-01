@@ -222,3 +222,41 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Sample data for hiking_trials schema
+
+USE hiking_trials;
+
+-- Insert into `user`
+INSERT INTO user (Username, UserType, Credibility, Email, PasswordHash, FirstName, LastName)
+VALUES ('jdoe', 'TrailModerator', 80, 'jdoe@example.com', 'fakehash123', 'John', 'Doe');
+
+INSERT INTO user (Username, UserType, Credibility, Email, PasswordHash, FirstName, LastName)
+VALUES ('sSmith', NULL, 81, 'susan@example.com', 'fakehash123', 'Susan', 'Smith');
+
+-- Insert into `profile`
+INSERT INTO profile (Username, Description)
+VALUES ('jdoe', 'Nature lover and experienced trail runner');
+
+-- Insert into `location` (root location — no valid ParentLocationID yet)
+INSERT INTO location (LocationID, ParentLocationID, Name, Description)
+VALUES (1, 1, 'Washington State', 'Top-level test location');
+
+-- Insert into `trail`
+INSERT INTO trail (TrailID, LocationID, Open, DogFriendly, RatingAverage, Description, BikeAllowed, Name, Difficulty, Duration, Length)
+VALUES (1, 1, b'1', b'1', 4.5, 'A scenic trail through the forest.', b'0', 'Evergreen Loop', 'Easy', '01:30:00', 3.2);
+
+-- Insert into `post`
+INSERT INTO post (PostID, Username, TrailID, Description, Title)
+VALUES (1, 'jdoe', 1, 'Beautiful day on the trail!', 'First Hike');
+
+-- Insert into `comment`
+INSERT INTO comment (CommentID, PostID, Username, Description)
+VALUES (1, 1, 'jdoe', 'Great trail!');
+
+-- Insert into `review`
+INSERT INTO review (Username, TrailID, Score, Description, Title)
+VALUES ('jdoe', 1, 5, 'Absolutely stunning views.', 'Highly Recommend');
+
+-- Insert into `weather`
+INSERT INTO weather (WeatherID, TrailID, TemperatureF, PrecipitationChance, Conditions, ForecastSource, ForDate)
+VALUES (1, 1, 65, 10, 'Sunny', 'NOAA', '2025-06-01');

@@ -1,12 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: MKochanski
- * Date: 7/24/2018
- * Time: 2:47 PM
- */
-$servername = 'vergil.u.washington.edu'; // Your Server (if noot)
-$username = 'your-mysql-user';
-$password = 'your-password';
-$database = 'your-database';
-$port = 20345; // Your Port
+$servername = "localhost"; // tells mysqli to use socket
+$username = "root";
+$password = ""; 
+$database = "hiking_trials";
+$port = null;
+$socket = "/home/cssuwbstudent/mysql.sock"; // path from your mysqld startup
+?>
