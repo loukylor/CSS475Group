@@ -21,9 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `hiking_trails`
 --
-DROP DATABASE `hiking_trials`;
-CREATE DATABASE `hiking_trials` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `hiking_trials`;
+-- DROP DATABASE `hiking_trials`;
+-- CREATE DATABASE `hiking_trials` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+-- USE `hiking_trials`;
 
 -- --------------------------------------------------------
 
@@ -31,6 +31,9 @@ USE `hiking_trials`;
 -- Table structure for table `location`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `location`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `location` (
   `LocationID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `ParentLocationID` int(11) NOT NULL,
@@ -45,6 +48,9 @@ CREATE TABLE `location` (
 -- Table structure for table `user`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `user`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `user` (
   `Username` varchar(64) NOT NULL PRIMARY KEY,
   `UserType` text DEFAULT NULL,
@@ -62,6 +68,9 @@ CREATE TABLE `user` (
 -- Table structure for table `profile`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `profile`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `profile` (
   `Username` varchar(64) NOT NULL PRIMARY KEY,
   `Description` text NOT NULL,
@@ -74,6 +83,9 @@ CREATE TABLE `profile` (
 -- Table structure for table `trail`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `trail`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `trail` (
   `TrailID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `LocationID` int(11) NOT NULL,
@@ -96,6 +108,9 @@ CREATE TABLE `trail` (
 -- Table structure for table `explored`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `explored`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `explored` (
   `Username` varchar(64) NOT NULL,
   `TrailID` int(11) NOT NULL,
@@ -110,6 +125,9 @@ CREATE TABLE `explored` (
 -- Table structure for table `post`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `post`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `post` (
   `PostID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `Username` varchar(64) NOT NULL,
@@ -128,6 +146,9 @@ CREATE TABLE `post` (
 -- Table structure for table `weather`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `weather`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `weather` (
   `WeatherID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `TrailID` int(11) NOT NULL COMMENT 'Weather on the trail itself, as a location may be quite large',
@@ -146,6 +167,9 @@ CREATE TABLE `weather` (
 -- Table structure for table `comment`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `comment`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `comment` (
   `CommentID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `PostID` int(11) NOT NULL,
@@ -161,6 +185,9 @@ CREATE TABLE `comment` (
 -- Table structure for table `image`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `image`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `image` (
   `ImageURL` varchar(255) NOT NULL PRIMARY KEY 
     COMMENT 'URLs can theoretically be longer, 
@@ -179,6 +206,9 @@ CREATE TABLE `image` (
 -- Table structure for table `review`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `review`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `review` (
   `Username` varchar(64) NOT NULL,
   `TrailID` int(11) NOT NULL,
@@ -197,6 +227,9 @@ CREATE TABLE `review` (
 -- Table structure for table `report`
 --
 
+SET FOREIGN_KEY_CHECKS=0;
+DROP TABLE IF EXISTS `report`;
+SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `report` (
   `ReportID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY
     COMMENT 'Fake PK. A composite PK of all attributes would work, but MySQL
