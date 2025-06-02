@@ -11,7 +11,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
 
         echo "<ul class='row-list'>";
         while ($stmt->fetch()) {
-            echo "<li>" . htmlspecialchars($get_row_func($bound_var, ...$bound_vars)) . "</li>";
+            echo "<li>" . $get_row_func($bound_var, ...$bound_vars) . "</li>";
         }
         echo "</ul>";
     }
