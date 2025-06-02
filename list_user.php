@@ -1,5 +1,6 @@
 <?php
 require_once 'config.inc.php';
+require_once 'render.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -51,21 +52,9 @@ require_once 'config.inc.php';
     }
 
     $sql = "SELECT FirstName, LastName, UserType FROM user";
-    $stmt = $conn->stmt_init();
-
-    if (!$stmt->prepare($sql)) {
-        echo "<p style='color:red;'>Failed to prepare SQL statement.</p>";
-    } else {
-        $stmt->execute();
-        $stmt->bind_result($firstName, $lastName, $userType);
-
-        echo "<ul class='user-list'>";
-        while ($stmt->fetch()) {
-            echo "<li><strong>" . htmlspecialchars("$firstName $lastName") . "</strong><br><span class='role'>" . htmlspecialchars($userType ?? 'Regular User') . "</span></li>";
-        }
-        echo "</ul>";
-    }
-
+    render_rows($sql, $first_name, $last_name, $user_type, function get_row($first_name, $last_name, $user_type) {
+        return get_row_title("$first_name $last_name") + "<br>" + get_row_sub($userType ?? "Regular User");
+    })
     $conn->close();
     ?>
 </div>
