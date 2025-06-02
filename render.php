@@ -10,7 +10,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
         $stmt->bind_result($bound_var, ...$bound_vars);
 
         $clear_var = htmlspecialchars($bound_var);
-        $clear_vars = [];
+        $clear_vars = array();
         for($i = 0; $i < count($bound_vars); ++$i) {
             array_push($clean_vars, htmlspecialchars($bound_vars[$i]));
         }
