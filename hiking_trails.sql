@@ -21,9 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `hiking_trails`
 --
--- DROP DATABASE `hiking_trails`;
--- CREATE DATABASE `hiking_trails` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
--- USE `hiking_trails`;
+DROP DATABASE `hiking_trails`;
+CREATE DATABASE `hiking_trails` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `hiking_trails`;
 
 -- --------------------------------------------------------
 
