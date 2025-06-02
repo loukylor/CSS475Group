@@ -43,6 +43,20 @@ CREATE TABLE `location` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
+INSERT INTO `location` (`ParentLocationID`, `Name`, `Description`) VALUES
+(NULL, 'Washington', 'State in the Pacific Northwest region of the United States'),
+(NULL, 'California', 'State on the West Coast of the United States'),
+(1, 'Gold Bar', 'City in Snohomish County, Washington, known for outdoor activities'),
+(1, 'Mount Rainier National Park', 'National park in Washington centered around Mount Rainier'),
+(2, 'Yosemite National Park', 'Iconic national park in California with giant sequoias and granite cliffs'),
+(2, 'Big Sur', 'Scenic region along California’s Central Coast'),
+(1, 'Olympic National Park', 'Diverse park on the Olympic Peninsula, featuring mountains, rainforest, and coastline'),
+(1, 'North Cascades National Park', 'Mountainous park in northern Washington with rugged peaks and alpine lakes'),
+(2, 'Redwood National and State Parks', 'Northern California parks with towering redwood trees and coastal views'),
+(2, 'Joshua Tree National Park', 'Desert park known for its unique Joshua trees and surreal rock formations'),
+(2, 'Lake Tahoe', 'Large freshwater lake in the Sierra Nevada Mountains, straddling California and Nevada'),
+(2, 'Sequoia National Park', 'Home to massive sequoia trees including General Sherman, the largest tree on Earth');
+-- --------------------------------------------------------
 
 --
 -- Table structure for table `user`
@@ -61,6 +75,21 @@ CREATE TABLE `user` (
   `LastName` varchar(64) NOT NULL,
   CHECK (`UserType` = 'TrailModerator' OR `UserType` = 'PostModerator' OR `UserType` IS NULL)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+INSERT INTO `user` 
+(`Username`, `UserType`, `Credibility`, `Email`, `PasswordHash`, `FirstName`, `LastName`) 
+VALUES
+('jdoe', NULL, 85, 'jdoe@example.com', UNHEX('5f4dcc3b5aa765d61d8327deb882cf99'), 'John', 'Doe'),
+('asmith', 'PostModerator', 100, 'asmith@example.com', UNHEX('d8578edf8458ce06fbc5bb76a58c5ca4'), 'Alice', 'Smith'),
+('kclark', NULL, 60, 'kai.clark@example.com', UNHEX('e99a18c428cb38d5f260853678922e03'), 'Kai', 'Clark'),
+('elliot_b', NULL, 55, 'elliot.brown@example.com', UNHEX('25d55ad283aa400af464c76d713c07ad'), 'Elliot', 'Brown'),
+('roryneal', 'TrailModerator', 100, 'rory.neal@example.com', UNHEX('5ebe2294ecd0e0f08eab7690d2a6ee69'), 'Rory', 'Neal'),
+('awelch', NULL, 88, 'arianna.welch@example.com', UNHEX('6cb75f652a9b52798eb6cf2201057c73'), 'Ariana', 'Welch'),
+('alana_s', NULL, 45, 'alana.shaw@example.com', UNHEX('8d3533d75ae2c3966d7e0d4fcc69216b'), 'Alana', 'Shaw'),
+('d_everett', 'TrailModerator', 100, 'duncan.everett@example.com', UNHEX('03c7c0ace395d80182db07ae2c30f034'), 'Duncan', 'Everett'),
+('arthur_c', NULL, 67, 'arthur.chen@example.com', UNHEX('e10adc3949ba59abbe56e057f20f883e'), 'Arthur', 'Chen'),
+('hunter_b', 'PostModerator', 100, 'hunter.briggs@example.com', UNHEX('098f6bcd4621d373cade4e832627b4f6'), 'Hunter', 'Briggs');
 
 -- --------------------------------------------------------
 
@@ -76,6 +105,15 @@ CREATE TABLE `profile` (
   `Description` text NOT NULL,
   FOREIGN KEY (`Username`) REFERENCES `user`(`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+INSERT INTO `profile` (`Username`, `Description`) VALUES
+('jdoe', 'A regular guy with a passion for exploring new trails.'),
+('kclark', 'Businessman by day but nighttime hiker.'),
+('elliot_b', 'Journalist and nature lover. Often hikes in search of quiet and inspiration.'),
+('awelch', 'Strong and adventurous, always seeking new paths to conquer.'),
+('alana_s', 'Independent spirit with a love for urban trails and mountain views.'),
+('arthur_c', 'I love hiking and pushing myself outdoors.');
 
 -- --------------------------------------------------------
 
@@ -101,7 +139,30 @@ CREATE TABLE `trail` (
   FOREIGN KEY (`LocationID`) REFERENCES `location`(`LocationID`),
   CHECK (`Difficulty` = 'Easy' OR `Difficulty` = 'Medium' OR `Difficulty` = 'Hard')
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
+-- --------------------------------------------------------
+INSERT INTO `trail` 
+(`LocationID`, `Open`, `DogFriendly`, `RatingAverage`, `Description`, `BikeAllowed`, `Name`, `Difficulty`, `Duration`, `Length`)
+VALUES 
+(12, 1, NULL, 4.27, 'A popular and challenging trail with views of the Snoqualmie Valley.', 0, 'Mount Si Trail', 'Hard', '4:10:00', 8),
+(12, 1, 0, 4.79, 'A short, steep hike with stunning views over Rattlesnake Lake.', 1, 'Rattlesnake Ledge', 'Easy', '1:25:00', 4),
+(12, 0, 0, 4.42, 'A moderate hike to beautiful waterfalls in the Snoqualmie region.', 0, 'Twin Falls Trail', 'Easy', '1:10:00', 2.4),
+(5, 0, 1, 4.86, 'Scenic alpine lake hike with mountain views and moderate difficulty.', 0, 'Snow Lake Trail', 'Hard', '3:30:00', 6.6),
+(4, NULL, 0, 4.71, 'Strenuous hike with rewarding summit views and a mailbox at the top.', 0, 'Mailbox Peak', 'Hard', '4:25:00', 9.4),
+(6, NULL, 0, 3.59, 'Loop trail with boardwalk sections around a pristine alpine lake.', 1, 'Lake 22 Trail', 'Medium', '2:45:00', 5.4),
+(10, 0, 1, 4.17, 'Easy hike to a picturesque waterfall near Snoqualmie Pass.', 1, 'Franklin Falls Trail', 'Easy', '1:00:00', 2.0),
+(6, 1, NULL, 4.39, 'Urban trail offering forest, beach, and views of Puget Sound.', 0, 'Discovery Park Loop', 'Easy', '1:30:00', 2.8),
+(7, NULL, 1, 3.87, 'Spectacular views of Mount Rainier and wildflower-filled meadows.', 1, 'Naches Peak Loop', 'Medium', '2:00:00', 3.5),
+(5, NULL, NULL, 4.73, 'Classic Mount Rainier trail with glaciers, wildflowers, and ridgelines.', 1, 'Skyline Trail', 'Medium', '2:45:00', 5.5),
+(3, 1, 0, 3.51, 'Forested hike leading to a tranquil mountain lake.', 1, 'Heather Lake Trail', 'Medium', '2:20:00', 4.6),
+(6, 1, NULL, 3.83, 'Lush moss-covered trail in Olympic National Park.', 0, 'Hoh Rain Forest Trail', 'Medium', '2:25:00', 5.0),
+(6, 1, 0, 3.82, 'Short trail to the northwesternmost point in the contiguous U.S.', 0, 'Cape Flattery Trail', 'Easy', '0:55:00', 1.5),
+(10, NULL, 1, 4.92, 'Moderate hike to a stunning cascading waterfall near Index.', 1, 'Bridal Veil Falls', 'Medium', '2:15:00', 4.0),
+(5, 1, 1, 4.61, 'Iconic Enchantments hike with turquoise alpine lake views.', 1, 'Colchuck Lake', 'Hard', '4:10:00', 8),
+(3, 1, 0, 4.83, 'Coastal bluff trail with views of Puget Sound and Olympic Mountains.', 1, 'Ebey’s Landing', 'Medium', '3:00:00', 5.6),
+(6, NULL, 0, 3.7, 'Popular waterfall hike with several falls and a forested trail.', 0, 'Wallace Falls', 'Medium', '2:50:00', 5.6),
+(4, 1, 0, 4.85, 'Urban loop around a lake, great for walking and jogging.', NULL, 'Green Lake Trail', 'Easy', '1:25:00', 2.8),
+(4, 1, 1, 3.69, 'Steep alpine hike to a fire lookout with panoramic views.', NULL, 'Mount Pilchuck', 'Medium', '2:45:00', 5.4),
+(3, NULL, NULL, 3.51, 'Challenging hike with a dramatic waterfall and forested trail.', NULL, 'Teneriffe Falls', 'Medium', '2:40:00', 5.4);
 -- --------------------------------------------------------
 
 --
@@ -118,6 +179,40 @@ CREATE TABLE `explored` (
   FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
   CONSTRAINT `PK_EXPLORED` PRIMARY KEY (`TrailID`, `Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+INSERT INTO `explored` (`Username`, `TrailID`) VALUES
+('kclark', 1),
+('kclark', 5),
+('kclark', 7),
+('jdoe', 2),
+('jdoe', 5),
+('jdoe', 8),
+('jdoe', 11),
+('jdoe', 14),
+('elliot_b', 2),
+('elliot_b', 4),
+('elliot_b', 6),
+('elliot_b', 8),
+('elliot_b', 9),
+('awelch', 1),
+('awelch', 3),
+('awelch', 7),
+('awelch', 10),
+('awelch', 15),
+('awelch', 19),
+('alana_s', 3),
+('alana_s', 5),
+('alana_s', 6),
+('alana_s', 7),
+('alana_s', 10),
+('alana_s', 11),
+('arthur_c', 1),
+('arthur_c', 4),
+('arthur_c', 6),
+('arthur_c', 7),
+('arthur_c', 8),
+('arthur_c', 9);
 
 -- --------------------------------------------------------
 
@@ -138,7 +233,15 @@ CREATE TABLE `post` (
   FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`),
   FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 
+INSERT INTO `post` (`Username`, `TrailID`, `Title`, `Description`) VALUES
+('jdoe', 2, 'Morning Hike', 'Enjoyed a refreshing morning walk with beautiful scenery.'),
+('kclark', 5, 'Loved MailBox Trail', 'Loved the hike and it had a great view at the top.'),
+('elliot_b', 6, 'Great Chill Hike', 'A perfect place for some peaceful reflection and nature photos.'),
+('alana_s', 8, 'Rooftop Views', 'The urban views from this trail are spectacular, especially at sunset.'),
+('arthur_c', 7, 'Coastal Breeze', 'Felt the ocean breeze and explored underwater ecosystems along this trail.'),
+('awelch', 1, 'Forest Walk', 'A serene trail that reconnects you with nature and calmness.');
 
 -- --------------------------------------------------------
 
@@ -160,6 +263,29 @@ CREATE TABLE `weather` (
   FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
   CHECK (PrecipitationChance >= 0 AND PrecipitationChance <= 100)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+INSERT INTO `weather` (`TrailID`, `TemperatureF`, `PrecipitationChance`, `Conditions`, `ForecastSource`, `ForDate`) VALUES
+(1, 75, 10, 'Partly Cloudy', 'OpenWeather', '2025-06-04'),
+(2, 82, 5, 'Sunny', 'OpenWeather', '2025-06-04'),
+(3, 68, 20, 'Mostly Cloudy', 'OpenWeather', '2025-06-04'),
+(4, 70, 30, 'Light Rain', 'OpenWeather', '2025-06-04'),
+(5, 65, 50, 'Rain Showers', 'OpenWeather', '2025-06-04'),
+(6, 78, 0, 'Clear', 'OpenWeather', '2025-06-04'),
+(7, 74, 15, 'Partly Cloudy', 'OpenWeather', '2025-06-04'),
+(8, 80, 10, 'Sunny', 'OpenWeather', '2025-06-04'),
+(9, 69, 40, 'Overcast', 'OpenWeather', '2025-06-04'),
+(10, 72, 25, 'Cloudy', 'OpenWeather', '2025-06-04'),
+(11, 77, 5, 'Sunny', 'OpenWeather', '2025-06-04'),
+(12, 64, 60, 'Heavy Rain', 'OpenWeather', '2025-06-04'),
+(13, 71, 10, 'Partly Cloudy', 'OpenWeather', '2025-06-04'),
+(14, 67, 35, 'Rain Showers', 'OpenWeather', '2025-06-04'),
+(15, 73, 0, 'Clear', 'OpenWeather', '2025-06-04'),
+(16, 76, 5, 'Sunny', 'OpenWeather', '2025-06-04'),
+(17, 70, 20, 'Mostly Cloudy', 'OpenWeather', '2025-06-04'),
+(18, 69, 30, 'Light Rain', 'OpenWeather', '2025-06-04'),
+(19, 75, 10, 'Partly Cloudy', 'OpenWeather', '2025-06-04'),
+(20, 68, 40, 'Overcast', 'OpenWeather', '2025-06-04');
 
 -- --------------------------------------------------------
 
@@ -178,6 +304,15 @@ CREATE TABLE `comment` (
   FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`),
   FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+INSERT INTO `comment` (`PostID`, `Username`, `Description`) VALUES
+(1, 'kclark', 'Sounds like a great way to start the day!'),
+(2, 'alana_s', 'That sounds fun, might have to try it soon.'),
+(3, 'awelch', 'I also love taking pictures on a hike. Got any to share?'),
+(4, 'arthur_c', 'Great place for reflection. Thanks for the rec!'),
+(5, 'elliot_b', 'Urban trails are underrated. Nice find!'),
+(6, 'jdoe', 'That breeze sounds amazing, I’ll check it out.');
 
 -- --------------------------------------------------------
 
@@ -220,6 +355,21 @@ CREATE TABLE `review` (
   CONSTRAINT `REVIEW_PK` PRIMARY KEY (`Username`, `TrailID`),
   CHECK (`Score` >= 1 AND `Score` <= 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
+
+INSERT INTO `review` (`Username`, `TrailID`, `Score`, `Description`, `Title`) VALUES
+('kclark', 1, 5, 'Loved the solitude and the skyline views.', 'Great Views'),
+('kclark', 5, 4, 'A relaxing afternoon walk with great scenery.', 'Calm & Clear'),
+('jdoe', 2, 4, 'Nice terrain, good for a mid-week hike.', 'Solid Hike'),
+('jdoe', 14, 3, 'Bit crowded but otherwise enjoyable.', 'Busy but Scenic'),
+('elliot_b', 6, 5, 'Perfect trail to clear your mind.', 'Very Relaxing'),
+('elliot_b', 9, 4, 'Loved the green coverage and calm atmosphere.', 'Nice Scenery'),
+('awelch', 10, 5, 'Beautiful path, inspiring nature.', 'Nice path and Good Views'),
+('awelch', 15, 4, 'Great terrain for long hikes.', 'Long but fun'),
+('alana_s', 6, 4, 'Long hike, but a rewarding view and nice lake at the top.', 'Hard Hike with a Nice Reward'),
+('alana_s', 7, 5, 'Easy hike with a great waterfall view.', 'Great hike for taking it easy.'),
+('arthur_c', 4, 5, 'Great elevstion and nice snowy views.', 'Snowy but not too hard'),
+('arthur_c', 8, 3, 'Could use more signage but overall solid.', 'Good Trail');
 
 -- --------------------------------------------------------
 
@@ -249,47 +399,41 @@ CREATE TABLE `report` (
     OR (`ReviewUsername` IS NOT NULL AND `ReviewTrailID` IS NOT NULL 
       AND `Username` IS NULL AND `CommentID` IS NULL AND `PostID` IS NULL))
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+-- --------------------------------------------------------
 
+INSERT INTO `report` 
+(`ReporterUsername`, `Username`, `ReviewUsername`, `ReviewTrailID`, `CommentID`, `PostID`) 
+VALUES
+-- Reports targeting alana_s
+('jdoe', 'alana_s', NULL, NULL, NULL, NULL),           	-- Profile
+('elliot_b', NULL, 'alana_s', 6, NULL, NULL),           -- Review
+('arthur_c', NULL, NULL, NULL, 3, NULL),                -- Comment
+('kclark', 'alana_s', NULL, NULL, NULL, NULL),         	-- Profile
+('jdoe', NULL, NULL, NULL, NULL, 4),             		    -- Post
+('awelch', NULL, NULL, NULL, NULL, 4),                 	-- Post
+-- Reports targeting elliot_b
+('kclark', NULL, 'elliot_b', 9, NULL, NULL),            -- Review
+('alana_s', NULL, NULL, NULL, 5, NULL),                	-- Comment
+('jdoe', NULL, 'elliot_b', 6, NULL, NULL),              -- Review
+('arthur_c', 'elliot_b', NULL, NULL, NULL, NULL),       -- Profile
+('kclark', NULL, NULL, NULL, NULL, 3),               	  -- Post
+-- Reports targeting kclark
+('arthur_c', NULL, 'kclark', 5, NULL, NULL),            -- Review
+('jdoe', 'kclark', NULL, NULL, NULL, NULL),             -- Profile
+('arthur_c', NULL, NULL, NULL, NULL, 2),            	  -- Post
+('alana_s', NULL, NULL, NULL, 1, NULL),             	  -- Comment
+-- Reports targeting arthur_c
+('elliot_b', NULL, NULL, NULL, 4, NULL),                -- Comment
+('jdoe', NULL, 'arthur_c', 8, NULL, NULL),            	-- Review
+('kclark', 'arthur_c', NULL, NULL, NULL, NULL),         -- Profile
+-- Reports targeting jdoe
+('alana_s', NULL, 'jdoe', 2, NULL, NULL);              	-- Review
+
+-- --------------------------------------------------------
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
--- Sample data for hiking_trials schema
 
 USE hiking_trials;
-
--- Insert into `user`
-INSERT INTO user (Username, UserType, Credibility, Email, PasswordHash, FirstName, LastName)
-VALUES ('jdoe', 'TrailModerator', 80, 'jdoe@example.com', 'fakehash123', 'John', 'Doe');
-
-INSERT INTO user (Username, UserType, Credibility, Email, PasswordHash, FirstName, LastName)
-VALUES ('sSmith', NULL, 81, 'susan@example.com', 'fakehash123', 'Susan', 'Smith');
-
--- Insert into `profile`
-INSERT INTO profile (Username, Description)
-VALUES ('jdoe', 'Nature lover and experienced trail runner');
-
--- Insert into `location` (root location — no valid ParentLocationID yet)
-INSERT INTO location (LocationID, ParentLocationID, Name, Description)
-VALUES (1, 1, 'Washington State', 'Top-level test location');
-
--- Insert into `trail`
-INSERT INTO trail (TrailID, LocationID, Open, DogFriendly, RatingAverage, Description, BikeAllowed, Name, Difficulty, Duration, Length)
-VALUES (1, 1, b'1', b'1', 4.5, 'A scenic trail through the forest.', b'0', 'Evergreen Loop', 'Easy', '01:30:00', 3.2);
-
--- Insert into `post`
-INSERT INTO post (PostID, Username, TrailID, Description, Title)
-VALUES (1, 'jdoe', 1, 'Beautiful day on the trail!', 'First Hike');
-
--- Insert into `comment`
-INSERT INTO comment (CommentID, PostID, Username, Description)
-VALUES (1, 1, 'jdoe', 'Great trail!');
-
--- Insert into `review`
-INSERT INTO review (Username, TrailID, Score, Description, Title)
-VALUES ('jdoe', 1, 5, 'Absolutely stunning views.', 'Highly Recommend');
-
--- Insert into `weather`
-INSERT INTO weather (WeatherID, TrailID, TemperatureF, PrecipitationChance, Conditions, ForecastSource, ForDate)
-VALUES (1, 1, 65, 10, 'Sunny', 'NOAA', '2025-06-01');
