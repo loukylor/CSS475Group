@@ -1,6 +1,6 @@
 <?php
 
-function render_rows(string $sql_query, $get_row_func, mixed &$bound_var, mixed &...$bound_vars): void {
+function render_rows(string $sql_query, $get_row_func, &$bound_var, &...$bound_vars): void {
     $stmt = $conn->stmt_init();
 
     if (!$stmt->prepare($sql_query)) {
