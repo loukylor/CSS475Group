@@ -54,7 +54,8 @@ require_once 'render.php';
     $sql = "SELECT FirstName, LastName, UserType FROM user";
     render_rows($sql, function ($first_name, $last_name, $user_type) {
         return get_row_title("$first_name $last_name") + "<br>" + get_row_sub($userType ?? "Regular User");
-    }, $first_name, $last_name, $user_type)
+    }, $first_name, $last_name, $user_type);
+    
     $conn->close();
     ?>
 </div>
