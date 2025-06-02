@@ -21,9 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `hiking_trails`
 --
--- DROP DATABASE `hiking_trials`;
--- CREATE DATABASE `hiking_trials` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
--- USE `hiking_trials`;
+DROP DATABASE `hiking_trials`;
+CREATE DATABASE `hiking_trials` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+USE `hiking_trials`;
 
 -- --------------------------------------------------------
 
@@ -36,7 +36,7 @@ DROP TABLE IF EXISTS `location`;
 SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `location` (
   `LocationID` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
-  `ParentLocationID` int(11) NOT NULL,
+  `ParentLocationID` int(11) default NULL,
   `Name` text NOT NULL,
   `Description` text NOT NULL,
   FOREIGN KEY (`ParentLocationID`) REFERENCES `location`(`LocationID`)
@@ -395,7 +395,7 @@ CREATE TABLE `report` (
   FOREIGN KEY (`ReviewUsername`, `ReviewTrailID`) REFERENCES `review`(`Username`, `TrailID`),
   FOREIGN KEY (`CommentID`) REFERENCES `comment`(`CommentID`),
   FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`),
-  CHECK ((`Username` IS NULL) + (`CommentID` IS NULL) + (`PostID` IS NULL) = 1 
+  CHECK ((`Username` IS NULL) + (`CommentID` IS NULL) + (`PostID` IS NULL) = 2
     OR (`ReviewUsername` IS NOT NULL AND `ReviewTrailID` IS NOT NULL 
       AND `Username` IS NULL AND `CommentID` IS NULL AND `PostID` IS NULL))
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -430,10 +430,15 @@ VALUES
 ('alana_s', NULL, 'jdoe', 2, NULL, NULL);              	-- Review
 
 -- --------------------------------------------------------
+
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+-- Sample data for hiking_trials schema
 
 USE hiking_trials;
+
+
+
