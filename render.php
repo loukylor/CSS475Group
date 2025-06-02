@@ -9,9 +9,15 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
         $stmt->execute();
         $stmt->bind_result($bound_var, ...$bound_vars);
 
+        $clear_var = htmlspecialchars($bound_var);
+        $clear_vars = [];
+        for($i = 0; $i < count($bound_vars); ++$i) {
+            array_push($clean_vars, htmlspecialchars($bound_vars[$i]));
+        }
+
         echo "<ul class='row-list'>";
         while ($stmt->fetch()) {
-            echo "<li>" . $get_row_func($bound_var, ...$bound_vars) . "</li>";
+            echo "<li>" . $get_row_func($clear_var, ...$clean_vars) . "</li>";
         }
         echo "</ul>";
     }
