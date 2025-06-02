@@ -7,36 +7,6 @@ require_once 'config.inc.php';
     <meta charset="UTF-8">
     <title>User Directory</title>
     <link rel="stylesheet" href="base.css">
-    <style>
-        body 
-        {
-            font-family: Arial, sans-serif;
-            margin: 2em;
-            background-color: #f9f9f9;
-        }
-
-        h2 {
-            color: #2c3e50;
-        }
-
-        ul.user-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul.user-list li {
-            background: #ffffff;
-            padding: 10px 15px;
-            margin: 8px 0;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .role {
-            color: #888;
-            font-size: 0.9em;
-        }
-    </style>
 </head>
 <body>
 
