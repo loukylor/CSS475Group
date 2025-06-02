@@ -11,18 +11,18 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
 
         echo "<ul class='row-list'>";
         while ($stmt->fetch()) {
-            echo htmlspecialchars("<li>" + $get_row_func($bound_var, ...$bound_vars) + "</li>");
+            echo "<li>" . htmlspecialchars($get_row_func($bound_var, ...$bound_vars)) . "</li>";
         }
         echo "</ul>";
     }
 }
 
 function get_row_title(string $column_data): string {
-    return "<li><strong>" + $column_data + "</strong></li>";
+    return "<li><strong>" . $column_data . "</strong></li>";
 }
 
 function get_row_sub(string $column_data): string {
-    return "<span class='role'>" . htmlspecialchars($userType ?? 'Regular User') . "</span>";
+    return "<span class='role'>" . $column_data . "</span>";
 }
 
 function render_statement_fail(): void {
