@@ -21,9 +21,9 @@ SET time_zone = "+00:00";
 --
 -- Database: `hiking_trails`
 --
-DROP DATABASE `hiking_trials`;
-CREATE DATABASE `hiking_trials` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
-USE `hiking_trials`;
+-- DROP DATABASE `hiking_trails`;
+-- CREATE DATABASE `hiking_trails` DEFAULT CHARACTER SET latin1 COLLATE latin1_swedish_ci;
+-- USE `hiking_trails`;
 
 -- --------------------------------------------------------
 
@@ -436,9 +436,3 @@ COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
--- Sample data for hiking_trials schema
-
-USE hiking_trials;
-
-
-
