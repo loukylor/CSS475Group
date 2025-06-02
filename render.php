@@ -18,7 +18,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
 }
 
 function get_row_title(string $column_data): string {
-    return "<li><strong>" . $column_data . "</strong></li>";
+    return "<strong>" . $column_data . "</strong>";
 }
 
 function get_row_sub(string $column_data): string {
