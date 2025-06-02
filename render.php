@@ -9,14 +9,14 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
         $stmt->execute();
         $stmt->bind_result($bound_var, ...$bound_vars);
 
-        $clean_var = htmlspecialchars($bound_var);
-        $clean_vars = array();
-        for($i = 0; $i < count($bound_vars); ++$i) {
-            array_push($clean_vars, htmlspecialchars($bound_vars[$i]));
-        }
-
         echo "<ul class='row-list'>";
         while ($stmt->fetch()) {
+            $clean_var = htmlspecialchars($bound_var);
+            $clean_vars = array();
+            for($i = 0; $i < count($bound_vars); ++$i) {
+                array_push($clean_vars, htmlspecialchars($bound_vars[$i]));
+            }
+            
             echo "<li>" . $get_row_func($clean_var, ...$clean_vars) . "</li>";
         }
         echo "</ul>";
