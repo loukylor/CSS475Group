@@ -24,10 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT LocationID, ParentLocationID, Name, Description FROM location";
-    
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($location_id, $parent_location_id, $name, $description) {
             $title = get_row_title("Location: $name (ID: $location_id)");
             $sub = get_row_sub("Parent ID: " . ($parent_location_id ?? "None") . " — $description");
