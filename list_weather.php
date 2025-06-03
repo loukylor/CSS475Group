@@ -22,17 +22,20 @@ require_once 'render.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT Username, TrailID FROM explored";
+    $sql = "SELECT WeatherID, TrailID, TemperatureF, Conditions, ForDate FROM weather";
     render_rows(
         $sql,
         $conn,
-        function ($Username, $TrailID) {
-            return get_row_title("$Username") . "<br>" . get_row_sub($TrailID);
+        function ($weather_id, $trail_id, $temp_f, $conditions, $for_date) {
+            return get_row_title("Weather #$weather_id") . "<br>" .
+                   get_row_sub("Trail $trail_id, $conditions, $temp_f°F on $for_date");
         },
-        "TrailID",       // Primary key column
-        "explored",           // Table name
-        $username, $TrailID
+        "WeatherID",     // primary key column
+        "weather",       // table name
+        false,           // not composite
+        $weather_id, $trail_id, $temp_f, $conditions, $for_date
     );
+    
     
     
     $conn->close();

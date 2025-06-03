@@ -14,7 +14,7 @@ require_once 'render.php';
 <?php require_once 'header.inc.php'; ?>
 
 <div>
-    <h2>Comment Directory</h2>
+    <h2>User Directory</h2>
     <?php
     $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 
@@ -31,6 +31,7 @@ require_once 'render.php';
         },
         "CommentID",       // Primary key column
         "comment",         // Table name
+        false,
         $comment_id, $post_id, $username, $description
     );
     

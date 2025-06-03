@@ -32,6 +32,7 @@ require_once 'render.php';
         },
         "LocationID",       // Primary key column
         "location",         // Table name
+        false,
         $location_id, $parent_location_id, $name, $description
     );
     

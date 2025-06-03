@@ -31,6 +31,7 @@ require_once 'render.php';
         },
         "Username",       // Primary key column
         "user",           // Table name
+        false,
         $username, $first_name, $last_name, $user_type
     );
     

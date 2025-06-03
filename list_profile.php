@@ -22,17 +22,19 @@ require_once 'render.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT Username, FirstName, LastName, UserType FROM user";
+    $sql = "SELECT Username, Description FROM profile";
     render_rows(
         $sql,
         $conn,
-        function ($username, $first_name, $last_name, $user_type) {
-            return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
+        function ($username, $description) {
+            return get_row_title("Profile: $username") . "<br>" . get_row_sub($description);
         },
-        "Username",       // Primary key column
-        "user",           // Table name
-        $username, $first_name, $last_name, $user_type
+        "Username",         // primary key column
+        "profile",          // table name
+        false,              // is_composite = false
+        $username, $description
     );
+    
     
     
     $conn->close();

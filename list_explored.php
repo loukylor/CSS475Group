@@ -29,8 +29,9 @@ require_once 'render.php';
         function ($username, $trail_id) {
             return get_row_title("User: $username") . "<br>" . get_row_sub("Trail ID: $trail_id");
         },
-        "TrailID",       // FIX LATER I DONT KNOW HOW THO
+        "Username|TrailID",      
         "explored",
+        true,
         $username, $trail_id
     );
     

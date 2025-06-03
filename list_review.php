@@ -22,16 +22,18 @@ require_once 'render.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT Username, FirstName, LastName, UserType FROM user";
+    $sql = "SELECT Username, TrailID, Title, Score FROM review";
     render_rows(
         $sql,
         $conn,
-        function ($username, $first_name, $last_name, $user_type) {
-            return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
+        function ($username, $trail_id, $title, $score) {
+            return get_row_title("Review: $title") . "<br>" .
+                   get_row_sub("User: $username | Trail: $trail_id | Score: $score/5");
         },
-        "Username",       // Primary key column
-        "user",           // Table name
-        $username, $first_name, $last_name, $user_type
+        "Username|TrailID",   // Composite key
+        "review",             // Table name
+        True,
+        $username, $trail_id, $title, $score
     );
     
     

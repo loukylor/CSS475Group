@@ -22,17 +22,20 @@ require_once 'render.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT Username, FirstName, LastName, UserType FROM user";
+    $sql = "SELECT PostID, Username, TrailID, Title FROM post";
     render_rows(
         $sql,
         $conn,
-        function ($username, $first_name, $last_name, $user_type) {
-            return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
+        function ($post_id, $username, $trail_id, $title) {
+            return get_row_title("Post #$post_id — $title") . "<br>" .
+                   get_row_sub("By $username on Trail #$trail_id");
         },
-        "Username",       // Primary key column
-        "user",           // Table name
-        $username, $first_name, $last_name, $user_type
+        "PostID",         // Primary key column
+        "post",           // Table name
+        false,
+        $post_id, $username, $trail_id, $title
     );
+    
     
     
     $conn->close();

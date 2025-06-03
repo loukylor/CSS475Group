@@ -22,17 +22,20 @@ require_once 'render.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT Username, FirstName, LastName, UserType FROM user";
+    $sql = "SELECT ImageURL, Username, PostID, FileSize FROM image";
     render_rows(
         $sql,
         $conn,
-        function ($username, $first_name, $last_name, $user_type) {
-            return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
+        function ($image_url, $username, $post_id, $file_size) {
+            return get_row_title("Image: $image_url") . "<br>" .
+                   get_row_sub("Uploaded by $username for Post #$post_id — Size: " . round($file_size / 1024, 2) . " KB");
         },
-        "Username",       // Primary key column
-        "user",           // Table name
-        $username, $first_name, $last_name, $user_type
+        "ImageURL",       // Primary key column
+        "image",          // Table name
+        false,
+        $image_url, $username, $post_id, $file_size
     );
+    
     
     
     $conn->close();
