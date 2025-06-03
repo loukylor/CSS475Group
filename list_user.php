@@ -15,19 +15,31 @@ require_once 'render.php';
 
 <div>
     <h2>User Directory</h2>
+    <a href="./insert.php?table=user">Insert into table</a>
+
     <?php
-    $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
+    $conn = new mysqli($servername, $username, $password, $database, $port);
 
     if ($conn->connect_error) {
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT FirstName, LastName, UserType FROM user";
-    render_rows($sql, $conn, function ($first_name, $last_name, $user_type) {
-        return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
-    }, $first_name, $last_name, $user_type);
+    $sql = "SELECT Username, FirstName, LastName, Email, Credibility FROM user";
+    render_rows(
+        $sql,
+        $conn,
+        function ($username, $first_name, $last_name, $email, $credibility) {
+            $content = get_row_title("User: $username") . "<br>" .
+                       get_row_sub("$first_name $last_name | $email | Credibility: $credibility");
+            $edit_link = "<a href='update_user.php?username=" . urlencode($username) . "' class='edit-link'>Update</a>";
+            return $content . "<br>" . $edit_link;
+        },
+        "Username",
+        "user",
+        false,
+        $username, $first_name, $last_name, $email, $credibility
+    );
     
-    $conn->close();
     ?>
 </div>
 

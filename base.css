@@ -41,7 +41,7 @@ ul.row-list {
     padding: 0;
 }
 
-ul.row-list li {
+ul.row-list li, .insert-input-div {
     background: #ffffff;
     padding: 10px 15px;
     margin: 8px 0;
@@ -52,4 +52,21 @@ ul.row-list li {
 .role {
     color: #888;
     font-size: 0.9em;
+}
+
+.empty-label {
+    float: right;
+    display: block;
+}
+
+.empty-input {
+    float: right;
+}
+
+.insert-label {
+    display: block;
+}
+
+.insert-input {
+    margin-bottom: 1em;
 }

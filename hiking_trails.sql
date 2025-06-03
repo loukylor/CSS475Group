@@ -39,7 +39,7 @@ CREATE TABLE `location` (
   `ParentLocationID` int(11) default NULL,
   `Name` text NOT NULL,
   `Description` text NOT NULL,
-  FOREIGN KEY (`ParentLocationID`) REFERENCES `location`(`LocationID`)
+  FOREIGN KEY (`ParentLocationID`) REFERENCES `location`(`LocationID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -103,7 +103,7 @@ SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `profile` (
   `Username` varchar(64) NOT NULL PRIMARY KEY,
   `Description` text NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`)
+  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
@@ -129,40 +129,39 @@ CREATE TABLE `trail` (
   `LocationID` int(11) NOT NULL,
   `Open` bit(1) DEFAULT NULL,
   `DogFriendly` bit(1) DEFAULT NULL,
-  `RatingAverage` float NOT NULL,
   `Description` text NOT NULL,
   `BikeAllowed` bit(1) DEFAULT NULL,
   `Name` text NOT NULL,
   `Difficulty` varchar(6) NOT NULL DEFAULT 'Medium' COMMENT '"Easy", "Medium", and "Hard"',
   `Duration` time NOT NULL,
   `Length` float NOT NULL,
-  FOREIGN KEY (`LocationID`) REFERENCES `location`(`LocationID`),
+  FOREIGN KEY (`LocationID`) REFERENCES `location`(`LocationID`) ON DELETE CASCADE, 
   CHECK (`Difficulty` = 'Easy' OR `Difficulty` = 'Medium' OR `Difficulty` = 'Hard')
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 INSERT INTO `trail` 
-(`LocationID`, `Open`, `DogFriendly`, `RatingAverage`, `Description`, `BikeAllowed`, `Name`, `Difficulty`, `Duration`, `Length`)
+(`LocationID`, `Open`, `DogFriendly`, `Description`, `BikeAllowed`, `Name`, `Difficulty`, `Duration`, `Length`)
 VALUES 
-(12, 1, NULL, 4.27, 'A popular and challenging trail with views of the Snoqualmie Valley.', 0, 'Mount Si Trail', 'Hard', '4:10:00', 8),
-(12, 1, 0, 4.79, 'A short, steep hike with stunning views over Rattlesnake Lake.', 1, 'Rattlesnake Ledge', 'Easy', '1:25:00', 4),
-(12, 0, 0, 4.42, 'A moderate hike to beautiful waterfalls in the Snoqualmie region.', 0, 'Twin Falls Trail', 'Easy', '1:10:00', 2.4),
-(5, 0, 1, 4.86, 'Scenic alpine lake hike with mountain views and moderate difficulty.', 0, 'Snow Lake Trail', 'Hard', '3:30:00', 6.6),
-(4, NULL, 0, 4.71, 'Strenuous hike with rewarding summit views and a mailbox at the top.', 0, 'Mailbox Peak', 'Hard', '4:25:00', 9.4),
-(6, NULL, 0, 3.59, 'Loop trail with boardwalk sections around a pristine alpine lake.', 1, 'Lake 22 Trail', 'Medium', '2:45:00', 5.4),
-(10, 0, 1, 4.17, 'Easy hike to a picturesque waterfall near Snoqualmie Pass.', 1, 'Franklin Falls Trail', 'Easy', '1:00:00', 2.0),
-(6, 1, NULL, 4.39, 'Urban trail offering forest, beach, and views of Puget Sound.', 0, 'Discovery Park Loop', 'Easy', '1:30:00', 2.8),
-(7, NULL, 1, 3.87, 'Spectacular views of Mount Rainier and wildflower-filled meadows.', 1, 'Naches Peak Loop', 'Medium', '2:00:00', 3.5),
-(5, NULL, NULL, 4.73, 'Classic Mount Rainier trail with glaciers, wildflowers, and ridgelines.', 1, 'Skyline Trail', 'Medium', '2:45:00', 5.5),
-(3, 1, 0, 3.51, 'Forested hike leading to a tranquil mountain lake.', 1, 'Heather Lake Trail', 'Medium', '2:20:00', 4.6),
-(6, 1, NULL, 3.83, 'Lush moss-covered trail in Olympic National Park.', 0, 'Hoh Rain Forest Trail', 'Medium', '2:25:00', 5.0),
-(6, 1, 0, 3.82, 'Short trail to the northwesternmost point in the contiguous U.S.', 0, 'Cape Flattery Trail', 'Easy', '0:55:00', 1.5),
-(10, NULL, 1, 4.92, 'Moderate hike to a stunning cascading waterfall near Index.', 1, 'Bridal Veil Falls', 'Medium', '2:15:00', 4.0),
-(5, 1, 1, 4.61, 'Iconic Enchantments hike with turquoise alpine lake views.', 1, 'Colchuck Lake', 'Hard', '4:10:00', 8),
-(3, 1, 0, 4.83, 'Coastal bluff trail with views of Puget Sound and Olympic Mountains.', 1, 'Ebey’s Landing', 'Medium', '3:00:00', 5.6),
-(6, NULL, 0, 3.7, 'Popular waterfall hike with several falls and a forested trail.', 0, 'Wallace Falls', 'Medium', '2:50:00', 5.6),
-(4, 1, 0, 4.85, 'Urban loop around a lake, great for walking and jogging.', NULL, 'Green Lake Trail', 'Easy', '1:25:00', 2.8),
-(4, 1, 1, 3.69, 'Steep alpine hike to a fire lookout with panoramic views.', NULL, 'Mount Pilchuck', 'Medium', '2:45:00', 5.4),
-(3, NULL, NULL, 3.51, 'Challenging hike with a dramatic waterfall and forested trail.', NULL, 'Teneriffe Falls', 'Medium', '2:40:00', 5.4);
+(12, 1, NULL, 'A popular and challenging trail with views of the Snoqualmie Valley.', 0, 'Mount Si Trail', 'Hard', '4:10:00', 8),
+(12, 1, 0, 'A short, steep hike with stunning views over Rattlesnake Lake.', 1, 'Rattlesnake Ledge', 'Easy', '1:25:00', 4),
+(12, 0, 0, 'A moderate hike to beautiful waterfalls in the Snoqualmie region.', 0, 'Twin Falls Trail', 'Easy', '1:10:00', 2.4),
+(5, 0, 1, 'Scenic alpine lake hike with mountain views and moderate difficulty.', 0, 'Snow Lake Trail', 'Hard', '3:30:00', 6.6),
+(4, NULL, 0, 'Strenuous hike with rewarding summit views and a mailbox at the top.', 0, 'Mailbox Peak', 'Hard', '4:25:00', 9.4),
+(6, NULL, 0, 'Loop trail with boardwalk sections around a pristine alpine lake.', 1, 'Lake 22 Trail', 'Medium', '2:45:00', 5.4),
+(10, 0, 1, 'Easy hike to a picturesque waterfall near Snoqualmie Pass.', 1, 'Franklin Falls Trail', 'Easy', '1:00:00', 2.0),
+(6, 1, NULL, 'Urban trail offering forest, beach, and views of Puget Sound.', 0, 'Discovery Park Loop', 'Easy', '1:30:00', 2.8),
+(7, NULL, 1, 'Spectacular views of Mount Rainier and wildflower-filled meadows.', 1, 'Naches Peak Loop', 'Medium', '2:00:00', 3.5),
+(5, NULL, NULL, 'Classic Mount Rainier trail with glaciers, wildflowers, and ridgelines.', 1, 'Skyline Trail', 'Medium', '2:45:00', 5.5),
+(3, 1, 0, 'Forested hike leading to a tranquil mountain lake.', 1, 'Heather Lake Trail', 'Medium', '2:20:00', 4.6),
+(6, 1, NULL, 'Lush moss-covered trail in Olympic National Park.', 0, 'Hoh Rain Forest Trail', 'Medium', '2:25:00', 5.0),
+(6, 1, 0, 'Short trail to the northwesternmost point in the contiguous U.S.', 0, 'Cape Flattery Trail', 'Easy', '0:55:00', 1.5),
+(10, NULL, 1, 'Moderate hike to a stunning cascading waterfall near Index.', 1, 'Bridal Veil Falls', 'Medium', '2:15:00', 4.0),
+(5, 1, 1, 'Iconic Enchantments hike with turquoise alpine lake views.', 1, 'Colchuck Lake', 'Hard', '4:10:00', 8),
+(3, 1, 0, 'Coastal bluff trail with views of Puget Sound and Olympic Mountains.', 1, 'Ebey’s Landing', 'Medium', '3:00:00', 5.6),
+(6, NULL, 0, 'Popular waterfall hike with several falls and a forested trail.', 0, 'Wallace Falls', 'Medium', '2:50:00', 5.6),
+(4, 1, 0, 'Urban loop around a lake, great for walking and jogging.', NULL, 'Green Lake Trail', 'Easy', '1:25:00', 2.8),
+(4, 1, 1, 'Steep alpine hike to a fire lookout with panoramic views.', NULL, 'Mount Pilchuck', 'Medium', '2:45:00', 5.4),
+(3, NULL, NULL, 'Challenging hike with a dramatic waterfall and forested trail.', NULL, 'Teneriffe Falls', 'Medium', '2:40:00', 5.4);
 -- --------------------------------------------------------
 
 --
@@ -175,8 +174,8 @@ SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `explored` (
   `Username` varchar(64) NOT NULL,
   `TrailID` int(11) NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`),
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
+  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE,
   CONSTRAINT `PK_EXPLORED` PRIMARY KEY (`TrailID`, `Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
@@ -230,8 +229,8 @@ CREATE TABLE `post` (
   `Description` varchar(255) NOT NULL,
   `PostDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Title` varchar(32) NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`),
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`)
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
@@ -260,7 +259,7 @@ CREATE TABLE `weather` (
   `Conditions` text NOT NULL COMMENT 'e.g. "Mostly Cloudy", "Rainy", etc.',
   `ForecastSource` text NOT NULL COMMENT 'The place the data is from',
   `ForDate` date NOT NULL COMMENT 'The date the weather data is for. MySQL 5.7 doesnt have a way to give it current date as default value',
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE,
   CHECK (PrecipitationChance >= 0 AND PrecipitationChance <= 100)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
@@ -301,8 +300,8 @@ CREATE TABLE `comment` (
   `PostID` int(11) NOT NULL,
   `Username` varchar(64) NOT NULL,
   `Description` varchar(255) NOT NULL,
-  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`),
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`)
+  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`) ON DELETE CASCADE,
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
@@ -331,9 +330,16 @@ CREATE TABLE `image` (
   `PostID` int(11) NOT NULL,
   `FileSize` int(11) UNSIGNED NOT NULL COMMENT 'File size in bytes',
   `UploadedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`),
-  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`)
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+INSERT INTO image (ImageURL, Username, PostID, FileSize, UploadedAt) VALUES
+('https://cdn.example.com/img/forest_walk_1.jpg', 'awelch', 6, 234512, '2025-06-01 14:05:00'),
+('https://cdn.example.com/img/morning_hike_2.jpg', 'jdoe', 1, 198754, '2025-06-01 10:00:00'),
+('https://cdn.example.com/img/chill_hike_scenery.jpg', 'elliot_b', 3, 301102, '2025-06-01 11:30:00'),
+('https://cdn.example.com/img/rooftop_views_sunset.jpg', 'alana_s', 4, 278991, '2025-06-01 15:45:00'),
+('https://cdn.example.com/img/coastal_breeze_ocean.jpg', 'arthur_c', 5, 312000, '2025-06-01 13:20:00');
 
 -- --------------------------------------------------------
 
@@ -350,8 +356,8 @@ CREATE TABLE `review` (
   `Score` int(11) NOT NULL COMMENT '[1-5]',
   `Description` varchar(255) NOT NULL,
   `Title` varchar(32) NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`),
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
+  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE,
   CONSTRAINT `REVIEW_PK` PRIMARY KEY (`Username`, `TrailID`),
   CHECK (`Score` >= 1 AND `Score` <= 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -390,11 +396,11 @@ CREATE TABLE `report` (
   `ReviewTrailID` int(11) DEFAULT NULL,
   `CommentID` int(11) DEFAULT NULL,
   `PostID` int(11) DEFAULT NULL,
-  FOREIGN KEY (`ReporterUsername`) REFERENCES `user`(`Username`),
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`),
-  FOREIGN KEY (`ReviewUsername`, `ReviewTrailID`) REFERENCES `review`(`Username`, `TrailID`),
-  FOREIGN KEY (`CommentID`) REFERENCES `comment`(`CommentID`),
-  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`),
+  FOREIGN KEY (`ReporterUsername`) REFERENCES `user`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`ReviewUsername`, `ReviewTrailID`) REFERENCES `review`(`Username`, `TrailID`) ON DELETE CASCADE,
+  FOREIGN KEY (`CommentID`) REFERENCES `comment`(`CommentID`) ON DELETE CASCADE,
+  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`) ON DELETE CASCADE,
   CHECK ((`Username` IS NULL) + (`CommentID` IS NULL) + (`PostID` IS NULL) = 2
     OR (`ReviewUsername` IS NOT NULL AND `ReviewTrailID` IS NOT NULL 
       AND `Username` IS NULL AND `CommentID` IS NULL AND `PostID` IS NULL))

@@ -1,5 +1,6 @@
 <?php
 require_once 'config.inc.php';
+require_once 'render.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -14,6 +15,7 @@ require_once 'config.inc.php';
 
 <div>
     <h2>Profile Directory</h2>
+    <a href="./insert.php?table=profile">Insert into table</a>
     <?php
     $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 
@@ -22,21 +24,18 @@ require_once 'config.inc.php';
     }
 
     $sql = "SELECT Username, Description FROM profile";
-    $stmt = $conn->stmt_init();
-
-    if (!$stmt->prepare($sql)) {
-        echo "<p style='color:red;'>Failed to prepare SQL statement.</p>";
-    } else {
-        $stmt->execute();
-        $stmt->bind_result($Username, $Description);
-
-        echo "<ul class='user-list'>";
-        while ($stmt->fetch()) {
-            echo "<li><strong>" . htmlspecialchars($Username) . "</strong><br>";
-            echo "<span class='role'>" . htmlspecialchars($Description) . "</span></li>";
-        }
-        echo "</ul>";
-    }
+    render_rows(
+        $sql,
+        $conn,
+        function ($username, $description) {
+            $editButton = '<a href="update_profile.php?username=' . urlencode($username) . '" style="margin-left:10px;">Update</a>';
+            return get_row_title("Profile: " . htmlspecialchars($username) . " $editButton") . "<br>" . get_row_sub(htmlspecialchars($description));
+        },
+        "Username",         // primary key column
+        "profile",          // table name
+        false,              // is_composite = false
+        $username, $description
+    );
 
     $conn->close();
     ?>
