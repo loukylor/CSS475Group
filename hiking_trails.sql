@@ -39,7 +39,7 @@ CREATE TABLE `location` (
   `ParentLocationID` int(11) default NULL,
   `Name` text NOT NULL,
   `Description` text NOT NULL,
-  FOREIGN KEY (`ParentLocationID`) REFERENCES `location`(`LocationID`)
+  FOREIGN KEY (`ParentLocationID`) REFERENCES `location`(`LocationID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -103,7 +103,7 @@ SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `profile` (
   `Username` varchar(64) NOT NULL PRIMARY KEY,
   `Description` text NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`)
+  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
@@ -136,7 +136,7 @@ CREATE TABLE `trail` (
   `Difficulty` varchar(6) NOT NULL DEFAULT 'Medium' COMMENT '"Easy", "Medium", and "Hard"',
   `Duration` time NOT NULL,
   `Length` float NOT NULL,
-  FOREIGN KEY (`LocationID`) REFERENCES `location`(`LocationID`),
+  FOREIGN KEY (`LocationID`) REFERENCES `location`(`LocationID`) ON DELETE CASCADE, 
   CHECK (`Difficulty` = 'Easy' OR `Difficulty` = 'Medium' OR `Difficulty` = 'Hard')
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
@@ -175,8 +175,8 @@ SET FOREIGN_KEY_CHECKS=1;
 CREATE TABLE `explored` (
   `Username` varchar(64) NOT NULL,
   `TrailID` int(11) NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`),
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
+  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE,
   CONSTRAINT `PK_EXPLORED` PRIMARY KEY (`TrailID`, `Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
@@ -230,8 +230,8 @@ CREATE TABLE `post` (
   `Description` varchar(255) NOT NULL,
   `PostDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `Title` varchar(32) NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`),
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`)
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
@@ -260,7 +260,7 @@ CREATE TABLE `weather` (
   `Conditions` text NOT NULL COMMENT 'e.g. "Mostly Cloudy", "Rainy", etc.',
   `ForecastSource` text NOT NULL COMMENT 'The place the data is from',
   `ForDate` date NOT NULL COMMENT 'The date the weather data is for. MySQL 5.7 doesnt have a way to give it current date as default value',
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE,
   CHECK (PrecipitationChance >= 0 AND PrecipitationChance <= 100)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
@@ -301,8 +301,8 @@ CREATE TABLE `comment` (
   `PostID` int(11) NOT NULL,
   `Username` varchar(64) NOT NULL,
   `Description` varchar(255) NOT NULL,
-  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`),
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`)
+  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`) ON DELETE CASCADE,
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
@@ -331,8 +331,8 @@ CREATE TABLE `image` (
   `PostID` int(11) NOT NULL,
   `FileSize` int(11) UNSIGNED NOT NULL COMMENT 'File size in bytes',
   `UploadedAt` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`),
-  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`)
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
@@ -350,8 +350,8 @@ CREATE TABLE `review` (
   `Score` int(11) NOT NULL COMMENT '[1-5]',
   `Description` varchar(255) NOT NULL,
   `Title` varchar(32) NOT NULL,
-  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`),
-  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`),
+  FOREIGN KEY (`Username`) REFERENCES `user`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`TrailID`) REFERENCES `trail`(`TrailID`) ON DELETE CASCADE,
   CONSTRAINT `REVIEW_PK` PRIMARY KEY (`Username`, `TrailID`),
   CHECK (`Score` >= 1 AND `Score` <= 5)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -390,11 +390,11 @@ CREATE TABLE `report` (
   `ReviewTrailID` int(11) DEFAULT NULL,
   `CommentID` int(11) DEFAULT NULL,
   `PostID` int(11) DEFAULT NULL,
-  FOREIGN KEY (`ReporterUsername`) REFERENCES `user`(`Username`),
-  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`),
-  FOREIGN KEY (`ReviewUsername`, `ReviewTrailID`) REFERENCES `review`(`Username`, `TrailID`),
-  FOREIGN KEY (`CommentID`) REFERENCES `comment`(`CommentID`),
-  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`),
+  FOREIGN KEY (`ReporterUsername`) REFERENCES `user`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE,
+  FOREIGN KEY (`ReviewUsername`, `ReviewTrailID`) REFERENCES `review`(`Username`, `TrailID`) ON DELETE CASCADE,
+  FOREIGN KEY (`CommentID`) REFERENCES `comment`(`CommentID`) ON DELETE CASCADE,
+  FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`) ON DELETE CASCADE,
   CHECK ((`Username` IS NULL) + (`CommentID` IS NULL) + (`PostID` IS NULL) = 2
     OR (`ReviewUsername` IS NOT NULL AND `ReviewTrailID` IS NOT NULL 
       AND `Username` IS NULL AND `CommentID` IS NULL AND `PostID` IS NULL))

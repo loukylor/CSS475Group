@@ -1,5 +1,6 @@
 <?php
 require_once 'config.inc.php';
+require_once 'render.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -13,7 +14,7 @@ require_once 'config.inc.php';
 <?php require_once 'header.inc.php'; ?>
 
 <div>
-    <h2>Profile Directory</h2>
+    <h2>User Directory</h2>
     <?php
     $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 
@@ -21,23 +22,19 @@ require_once 'config.inc.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT Username, Description FROM profile";
-    $stmt = $conn->stmt_init();
-
-    if (!$stmt->prepare($sql)) {
-        echo "<p style='color:red;'>Failed to prepare SQL statement.</p>";
-    } else {
-        $stmt->execute();
-        $stmt->bind_result($Username, $Description);
-
-        echo "<ul class='user-list'>";
-        while ($stmt->fetch()) {
-            echo "<li><strong>" . htmlspecialchars($Username) . "</strong><br>";
-            echo "<span class='role'>" . htmlspecialchars($Description) . "</span></li>";
-        }
-        echo "</ul>";
-    }
-
+    $sql = "SELECT Username, FirstName, LastName, UserType FROM user";
+    render_rows(
+        $sql,
+        $conn,
+        function ($username, $first_name, $last_name, $user_type) {
+            return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
+        },
+        "Username",       // Primary key column
+        "user",           // Table name
+        $username, $first_name, $last_name, $user_type
+    );
+    
+    
     $conn->close();
     ?>
 </div>

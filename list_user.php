@@ -22,10 +22,18 @@ require_once 'render.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT FirstName, LastName, UserType FROM user";
-    render_rows($sql, $conn, function ($first_name, $last_name, $user_type) {
-        return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
-    }, $first_name, $last_name, $user_type);
+    $sql = "SELECT Username, FirstName, LastName, UserType FROM user";
+    render_rows(
+        $sql,
+        $conn,
+        function ($username, $first_name, $last_name, $user_type) {
+            return get_row_title("$first_name $last_name") . "<br>" . get_row_sub($user_type == "" ? "Regular User" : $user_type);
+        },
+        "Username",       // Primary key column
+        "user",           // Table name
+        $username, $first_name, $last_name, $user_type
+    );
+    
     
     $conn->close();
     ?>

@@ -1,5 +1,6 @@
 <?php
 require_once 'config.inc.php';
+require_once 'render.php';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -7,42 +8,13 @@ require_once 'config.inc.php';
     <meta charset="UTF-8">
     <title>User Directory</title>
     <link rel="stylesheet" href="base.css">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 2em;
-            background-color: #f9f9f9;
-        }
-
-        h2 {
-            color: #2c3e50;
-        }
-
-        ul.user-list {
-            list-style: none;
-            padding: 0;
-        }
-
-        ul.user-list li {
-            background: #ffffff;
-            padding: 10px 15px;
-            margin: 8px 0;
-            border-radius: 6px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-        }
-
-        .role {
-            color: #888;
-            font-size: 0.9em;
-        }
-    </style>
 </head>
 <body>
 
 <?php require_once 'header.inc.php'; ?>
 
 <div>
-    <h2>User Directory</h2>
+    <h2>Comment Directory</h2>
     <?php
     $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 
@@ -50,22 +22,20 @@ require_once 'config.inc.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT FirstName, LastName, UserType FROM user";
-    $stmt = $conn->stmt_init();
-
-    if (!$stmt->prepare($sql)) {
-        echo "<p style='color:red;'>Failed to prepare SQL statement.</p>";
-    } else {
-        $stmt->execute();
-        $stmt->bind_result($firstName, $lastName, $userType);
-
-        echo "<ul class='user-list'>";
-        while ($stmt->fetch()) {
-            echo "<li><strong>" . htmlspecialchars("$firstName $lastName") . "</strong><br><span class='role'>" . htmlspecialchars($userType ?? 'Regular User') . "</span></li>";
-        }
-        echo "</ul>";
-    }
-
+    $sql = "SELECT CommentID, PostID, Username, Description FROM comment";
+    render_rows(
+        $sql,
+        $conn,
+        function ($comment_id, $post_id, $username, $description) {
+            return get_row_title("$username — Comment #$comment_id on Post #$post_id") . "<br>" . get_row_sub($description);
+        },
+        "CommentID",       // Primary key column
+        "comment",         // Table name
+        $comment_id, $post_id, $username, $description
+    );
+    
+    
+    
     $conn->close();
     ?>
 </div>
