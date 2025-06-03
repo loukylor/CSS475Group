@@ -75,7 +75,6 @@ require_once 'render.php';
         $stmt->bind_param($types, ...$params);
     }
     $stmt->execute();
-    //$sql = "SELECT Username, FirstName, LastName, Email, Credibility FROM user";
     echo($sql);
     render_rows(
         $sql,

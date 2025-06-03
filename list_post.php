@@ -64,7 +64,6 @@ require_once 'render.php';
     if ($types && $params) {
         $stmt->bind_param($types, ...$params);
     }
-    //$sql2 = "SELECT PostID, Username, TrailID, Title FROM post";
 
     $stmt->execute();
     render_rows(

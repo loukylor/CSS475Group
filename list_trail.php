@@ -108,9 +108,6 @@ require_once 'render.php';
         $stmt->bind_param($types, ...$params);
     }
     $stmt->execute();
-    //$sql = "SELECT TrailID, Name, Description, Difficulty FROM trail";
-    //$stmt = $conn->prepare($sql);
-    //$stmt ->execute();
     render_rows(
         $sql,
         $stmt,
