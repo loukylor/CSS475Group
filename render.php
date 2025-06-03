@@ -17,10 +17,19 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
                 array_push($clean_vars, htmlspecialchars($bound_vars[$i]));
             }
             
-            echo "<li>" . $get_row_func($bound_var, ...$bound_vars) . "</li>";
+            echo "<li style='display: flex; justify-content: space-between; align-items: center; flex-direction: row;'>
+        <div>
+            " . $get_row_func($clean_var, ...$clean_vars) . "
+        </div>
+        <form method='POST' action='delete_user.php' style='margin-left: 1em;'>
+            <input type='hidden' name='username' value='" . $clean_var . "'>
+            <button type='submit' class='delete-btn'>Delete</button>
+        </form>
+      </li>";
+
         }
         echo "</ul>";
-    }
+    }   
 }
 
 function get_row_title(string $column_data): string {
