@@ -24,9 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT ImageURL, Username, PostID, FileSize FROM image";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($image_url, $username, $post_id, $file_size) {
             return get_row_title("Image: $image_url") . "<br>" .
                    get_row_sub("Uploaded by $username for Post #$post_id — Size: " . round($file_size / 1024, 2) . " KB");

@@ -24,9 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT ReportID, ReporterUsername, Username, ReviewUsername, ReviewTrailID, CommentID, PostID FROM report";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($report_id, $reporter_username, $username, $review_username, $review_trail_id, $comment_id, $post_id) {
             if ($username !== '') {
                 $sub = "Profile: $username";

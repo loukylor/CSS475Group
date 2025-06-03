@@ -24,9 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT CommentID, PostID, Username, Description FROM comment";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($comment_id, $post_id, $username, $description) {
             $editLink = "<a href='update_comment.php?id=" . urlencode($comment_id) . "'>Update</a>";
             $title = "Comment by $username on Post #$post_id $editLink";
