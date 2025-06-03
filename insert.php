@@ -109,8 +109,6 @@ function insert_row(mysqli $conn, string $table) {
         if (!isset($_POST[$col['Field']])) {
             continue;
         }
-        echo $col['Field'];
-        echo $col['Type'];
         $field_names[] = $col['Field'];
         $q_marks[] = '?';
         $value = $_POST[$col['Field']];
