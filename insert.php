@@ -23,6 +23,7 @@ function render_insert_form(mysqli $conn, string $table) {
         $default = $col['Default'];
         switch ($col['Type']) {
             case 'int':
+            case 'int(11)':
                 $type = 'number';
                 break;
             case 'float':
@@ -117,6 +118,7 @@ function insert_row(mysqli $conn, string $table) {
 
         switch ($col['Type']) {
             case 'int':
+            case 'int(11)':
                 $types .= 'i';
                 break;
             case 'bit(1)':
