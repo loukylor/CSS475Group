@@ -27,16 +27,15 @@ require_once 'render.php';
         $sql,
         $conn,
         function ($username, $description) {
-            return get_row_title("Profile: $username") . "<br>" . get_row_sub($description);
+            $editButton = '<a href="update_profile.php?username=' . urlencode($username) . '" style="margin-left:10px;">Update</a>';
+            return get_row_title("Profile: " . htmlspecialchars($username) . " $editButton") . "<br>" . get_row_sub(htmlspecialchars($description));
         },
         "Username",         // primary key column
         "profile",          // table name
         false,              // is_composite = false
         $username, $description
     );
-    
-    
-    
+
     $conn->close();
     ?>
 </div>

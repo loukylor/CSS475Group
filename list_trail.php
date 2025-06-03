@@ -27,13 +27,15 @@ require_once 'render.php';
         $sql,
         $conn,
         function ($trail_id, $name, $description, $difficulty) {
-            return get_row_title("Trail #$trail_id: $name") . "<br>" . get_row_sub("$difficulty — $description");
+            $edit_link = "<a href='update_trail.php?id=$trail_id'>Update</a>";
+            return get_row_title("Trail #$trail_id: $name") . " [$edit_link]<br>" . get_row_sub("$difficulty — $description");
         },
         "TrailID",     // Primary key column
         "trail",       // Table name
         false,         // is_composite = false
         $trail_id, $name, $description, $difficulty
     );
+    
     
     
     

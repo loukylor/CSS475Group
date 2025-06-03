@@ -27,16 +27,19 @@ require_once 'render.php';
         $sql,
         $conn,
         function ($username, $trail_id, $title, $score) {
+            // URL encode to avoid issues with special chars
+            $edit_url = "update_review.php?username=" . urlencode($username) . "&trailid=" . urlencode($trail_id);
+
             return get_row_title("Review: $title") . "<br>" .
-                   get_row_sub("User: $username | Trail: $trail_id | Score: $score/5");
+                   get_row_sub("User: $username | Trail: $trail_id | Score: $score/5") .
+                   "<br><a href='$edit_url' style='color:blue;'>Update</a>";
         },
         "Username|TrailID",   // Composite key
         "review",             // Table name
         True,
         $username, $trail_id, $title, $score
     );
-    
-    
+
     $conn->close();
     ?>
 </div>

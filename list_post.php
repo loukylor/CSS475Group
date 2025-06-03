@@ -27,17 +27,17 @@ require_once 'render.php';
         $sql,
         $conn,
         function ($post_id, $username, $trail_id, $title) {
-            return get_row_title("Post #$post_id — $title") . "<br>" .
-                   get_row_sub("By $username on Trail #$trail_id");
+            $content = get_row_title("Post #$post_id — $title") . "<br>" .
+                       get_row_sub("By $username on Trail #$trail_id");
+            $edit_link = "<a href='update_post.php?postid=$post_id' class='edit-link'>Update</a>";
+            return $content . "<br>" . $edit_link;
         },
         "PostID",         // Primary key column
         "post",           // Table name
         false,
         $post_id, $username, $trail_id, $title
     );
-    
-    
-    
+
     $conn->close();
     ?>
 </div>

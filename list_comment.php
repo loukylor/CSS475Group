@@ -27,16 +27,16 @@ require_once 'render.php';
         $sql,
         $conn,
         function ($comment_id, $post_id, $username, $description) {
-            return get_row_title("$username — Comment #$comment_id on Post #$post_id") . "<br>" . get_row_sub($description);
+            $editLink = "<a href='update_comment.php?id=" . urlencode($comment_id) . "'>Update</a>";
+            $title = "Comment by $username on Post #$post_id $editLink";
+            return get_row_title($title) . "<br>" . get_row_sub($description);
         },
         "CommentID",       // Primary key column
         "comment",         // Table name
         false,
         $comment_id, $post_id, $username, $description
     );
-    
-    
-    
+
     $conn->close();
     ?>
 </div>
