@@ -7,7 +7,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
         render_statement_fail();
     } else {
         $stmt->execute();
-        $stmt->bind_result($bound_var, &...$bound_vars);
+        $stmt->bind_result($bound_var, $thing);
 
         echo "<ul class='row-list'>";
         while ($stmt->fetch()) {
@@ -19,7 +19,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
             
             echo "<li style='display: flex; justify-content: space-between; align-items: center; flex-direction: row;'>
         <div>
-            " . $get_row_func($clean_var, ...$clean_vars) . "
+            " . $get_row_func($clean_var, $thing) . "
         </div>
         <form method='POST' action='delete_user.php' style='margin-left: 1em;'>
             <input type='hidden' name='username' value='" . $clean_var . "'>
