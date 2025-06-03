@@ -184,7 +184,7 @@ function insert_row(mysqli $conn, string $table) {
     if ($stmt->errno !== 0) {
         echo "<p style='color:red;'>Error occurred: {$stmt->error}</p>";
     } else {
-        header("Location: " . "/list_$table.php");
+        header("Location: " . "./list_$table.php");
         $conn->close();
         exit();
     }
