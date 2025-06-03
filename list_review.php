@@ -14,7 +14,7 @@ require_once 'render.php';
 <?php require_once 'header.inc.php'; ?>
 
 <div>
-    <h2>User Directory</h2>
+    <h2>Review Directory</h2>
     <?php
     $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 

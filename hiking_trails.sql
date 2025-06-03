@@ -335,6 +335,13 @@ CREATE TABLE `image` (
   FOREIGN KEY (`PostID`) REFERENCES `post`(`PostID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+INSERT INTO image (ImageURL, Username, PostID, FileSize, UploadedAt) VALUES
+('https://cdn.example.com/img/forest_walk_1.jpg', 'awelch', 6, 234512, '2025-06-01 14:05:00'),
+('https://cdn.example.com/img/morning_hike_2.jpg', 'jdoe', 1, 198754, '2025-06-01 10:00:00'),
+('https://cdn.example.com/img/chill_hike_scenery.jpg', 'elliot_b', 3, 301102, '2025-06-01 11:30:00'),
+('https://cdn.example.com/img/rooftop_views_sunset.jpg', 'alana_s', 4, 278991, '2025-06-01 15:45:00'),
+('https://cdn.example.com/img/coastal_breeze_ocean.jpg', 'arthur_c', 5, 312000, '2025-06-01 13:20:00');
+
 -- --------------------------------------------------------
 
 --
