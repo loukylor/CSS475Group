@@ -1,6 +1,24 @@
 <?php
 
 include_once 'render.php';
+require_once 'config.inc.php'; 
+
+// Create connection
+$conn = new mysqli($servername, $username, $password, $database, $port);
+
+if ($conn->connect_error) {
+    die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
+}
+
+parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $queries);
+$table = $queries['table'];
+
+
+// Perform insertion on post
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    insert_row($conn, $table);
+}
+
 
 function render_insert_form(mysqli $conn, string $table) {
     $cols = get_table_cols($conn, $table);
@@ -163,6 +181,7 @@ function insert_row(mysqli $conn, string $table) {
     // Execute using user vals
     $stmt->bind_param($types, ...$values);
     $stmt->execute();
+    $conn->close();
     if ($stmt->errno !== 0) {
         echo "<p style='color:red;'>Error occurred: {$stmt->error}</p>";
     } else {
@@ -192,36 +211,17 @@ function get_table_cols(mysqli $conn, string $table): array {
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <?php 
-    parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $queries);
-    $table = $queries['table'];
-    echo "<title>Insert into \"{$table}\"</title>"; 
-    ?>
+    <?php echo "<title>Insert into \"{$table}\"</title>"; ?>
     <link rel="stylesheet" href="base.css">
 </head>
 <body>
 
 <?php 
 
-require_once 'config.inc.php'; 
 require_once 'header.inc.php'; 
-
-$conn = new mysqli($servername, $username, $password, $database, $port);
-
-if ($conn->connect_error) {
-    die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
-}
-
-parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $queries);
-$table = $queries['table'];
 
 // Render form
 render_insert_form($conn, $table);
-
-// Perform insertion on post
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    insert_row($conn, $table);
-}
 
 $conn->close();
 
