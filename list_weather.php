@@ -15,6 +15,7 @@ require_once 'render.php';
 
 <div>
     <h2>Weather Directory</h2>
+    <a href="./insert.php?table=weather">Insert into table</a>
     <?php
     $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 

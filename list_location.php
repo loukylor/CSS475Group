@@ -15,6 +15,7 @@ require_once 'render.php';
 
 <div>
     <h2>Location Directory</h2>
+    <a href="./insert.php?table=location">Insert into table</a>
     <?php
     $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 

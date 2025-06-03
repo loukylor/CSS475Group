@@ -15,8 +15,11 @@ require_once 'render.php';
 
 <div>
     <h2>User Directory</h2>
+    <a href="./insert.php?table=user">Insert into table</a>
+
     <?php
-    $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
+    $conn = new mysqli($servername, $username, $password, $database, $port);
+
     if ($conn->connect_error) {
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
@@ -36,8 +39,7 @@ require_once 'render.php';
         false,
         $username, $first_name, $last_name, $email, $credibility
     );
-
-    $conn->close();
+    
     ?>
 </div>
 
