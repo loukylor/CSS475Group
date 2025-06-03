@@ -7,7 +7,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
         render_statement_fail();
     } else {
         $stmt->execute();
-        $stmt->bind_result($bound_var, ...$bound_vars);
+        $stmt->bind_result($bound_var, ...&$bound_vars);
 
         echo "<ul class='row-list'>";
         while ($stmt->fetch()) {
