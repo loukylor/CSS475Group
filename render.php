@@ -17,7 +17,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
                 array_push($clean_vars, htmlspecialchars($bound_vars[$i]));
             }
             
-            echo "<li>" . $get_row_func($clean_var, ...$clean_vars) . "</li>";
+            echo "<li>" . $get_row_func($bound_var, ...$bound_vars) . "</li>";
         }
         echo "</ul>";
     }
