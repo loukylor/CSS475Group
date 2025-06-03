@@ -129,7 +129,6 @@ CREATE TABLE `trail` (
   `LocationID` int(11) NOT NULL,
   `Open` bit(1) DEFAULT NULL,
   `DogFriendly` bit(1) DEFAULT NULL,
-  `RatingAverage` float NOT NULL,
   `Description` text NOT NULL,
   `BikeAllowed` bit(1) DEFAULT NULL,
   `Name` text NOT NULL,
@@ -141,28 +140,28 @@ CREATE TABLE `trail` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 INSERT INTO `trail` 
-(`LocationID`, `Open`, `DogFriendly`, `RatingAverage`, `Description`, `BikeAllowed`, `Name`, `Difficulty`, `Duration`, `Length`)
+(`LocationID`, `Open`, `DogFriendly`, `Description`, `BikeAllowed`, `Name`, `Difficulty`, `Duration`, `Length`)
 VALUES 
-(12, 1, NULL, 4.27, 'A popular and challenging trail with views of the Snoqualmie Valley.', 0, 'Mount Si Trail', 'Hard', '4:10:00', 8),
-(12, 1, 0, 4.79, 'A short, steep hike with stunning views over Rattlesnake Lake.', 1, 'Rattlesnake Ledge', 'Easy', '1:25:00', 4),
-(12, 0, 0, 4.42, 'A moderate hike to beautiful waterfalls in the Snoqualmie region.', 0, 'Twin Falls Trail', 'Easy', '1:10:00', 2.4),
-(5, 0, 1, 4.86, 'Scenic alpine lake hike with mountain views and moderate difficulty.', 0, 'Snow Lake Trail', 'Hard', '3:30:00', 6.6),
-(4, NULL, 0, 4.71, 'Strenuous hike with rewarding summit views and a mailbox at the top.', 0, 'Mailbox Peak', 'Hard', '4:25:00', 9.4),
-(6, NULL, 0, 3.59, 'Loop trail with boardwalk sections around a pristine alpine lake.', 1, 'Lake 22 Trail', 'Medium', '2:45:00', 5.4),
-(10, 0, 1, 4.17, 'Easy hike to a picturesque waterfall near Snoqualmie Pass.', 1, 'Franklin Falls Trail', 'Easy', '1:00:00', 2.0),
-(6, 1, NULL, 4.39, 'Urban trail offering forest, beach, and views of Puget Sound.', 0, 'Discovery Park Loop', 'Easy', '1:30:00', 2.8),
-(7, NULL, 1, 3.87, 'Spectacular views of Mount Rainier and wildflower-filled meadows.', 1, 'Naches Peak Loop', 'Medium', '2:00:00', 3.5),
-(5, NULL, NULL, 4.73, 'Classic Mount Rainier trail with glaciers, wildflowers, and ridgelines.', 1, 'Skyline Trail', 'Medium', '2:45:00', 5.5),
-(3, 1, 0, 3.51, 'Forested hike leading to a tranquil mountain lake.', 1, 'Heather Lake Trail', 'Medium', '2:20:00', 4.6),
-(6, 1, NULL, 3.83, 'Lush moss-covered trail in Olympic National Park.', 0, 'Hoh Rain Forest Trail', 'Medium', '2:25:00', 5.0),
-(6, 1, 0, 3.82, 'Short trail to the northwesternmost point in the contiguous U.S.', 0, 'Cape Flattery Trail', 'Easy', '0:55:00', 1.5),
-(10, NULL, 1, 4.92, 'Moderate hike to a stunning cascading waterfall near Index.', 1, 'Bridal Veil Falls', 'Medium', '2:15:00', 4.0),
-(5, 1, 1, 4.61, 'Iconic Enchantments hike with turquoise alpine lake views.', 1, 'Colchuck Lake', 'Hard', '4:10:00', 8),
-(3, 1, 0, 4.83, 'Coastal bluff trail with views of Puget Sound and Olympic Mountains.', 1, 'Ebey’s Landing', 'Medium', '3:00:00', 5.6),
-(6, NULL, 0, 3.7, 'Popular waterfall hike with several falls and a forested trail.', 0, 'Wallace Falls', 'Medium', '2:50:00', 5.6),
-(4, 1, 0, 4.85, 'Urban loop around a lake, great for walking and jogging.', NULL, 'Green Lake Trail', 'Easy', '1:25:00', 2.8),
-(4, 1, 1, 3.69, 'Steep alpine hike to a fire lookout with panoramic views.', NULL, 'Mount Pilchuck', 'Medium', '2:45:00', 5.4),
-(3, NULL, NULL, 3.51, 'Challenging hike with a dramatic waterfall and forested trail.', NULL, 'Teneriffe Falls', 'Medium', '2:40:00', 5.4);
+(12, 1, NULL, 'A popular and challenging trail with views of the Snoqualmie Valley.', 0, 'Mount Si Trail', 'Hard', '4:10:00', 8),
+(12, 1, 0, 'A short, steep hike with stunning views over Rattlesnake Lake.', 1, 'Rattlesnake Ledge', 'Easy', '1:25:00', 4),
+(12, 0, 0, 'A moderate hike to beautiful waterfalls in the Snoqualmie region.', 0, 'Twin Falls Trail', 'Easy', '1:10:00', 2.4),
+(5, 0, 1, 'Scenic alpine lake hike with mountain views and moderate difficulty.', 0, 'Snow Lake Trail', 'Hard', '3:30:00', 6.6),
+(4, NULL, 0, 'Strenuous hike with rewarding summit views and a mailbox at the top.', 0, 'Mailbox Peak', 'Hard', '4:25:00', 9.4),
+(6, NULL, 0, 'Loop trail with boardwalk sections around a pristine alpine lake.', 1, 'Lake 22 Trail', 'Medium', '2:45:00', 5.4),
+(10, 0, 1, 'Easy hike to a picturesque waterfall near Snoqualmie Pass.', 1, 'Franklin Falls Trail', 'Easy', '1:00:00', 2.0),
+(6, 1, NULL, 'Urban trail offering forest, beach, and views of Puget Sound.', 0, 'Discovery Park Loop', 'Easy', '1:30:00', 2.8),
+(7, NULL, 1, 'Spectacular views of Mount Rainier and wildflower-filled meadows.', 1, 'Naches Peak Loop', 'Medium', '2:00:00', 3.5),
+(5, NULL, NULL, 'Classic Mount Rainier trail with glaciers, wildflowers, and ridgelines.', 1, 'Skyline Trail', 'Medium', '2:45:00', 5.5),
+(3, 1, 0, 'Forested hike leading to a tranquil mountain lake.', 1, 'Heather Lake Trail', 'Medium', '2:20:00', 4.6),
+(6, 1, NULL, 'Lush moss-covered trail in Olympic National Park.', 0, 'Hoh Rain Forest Trail', 'Medium', '2:25:00', 5.0),
+(6, 1, 0, 'Short trail to the northwesternmost point in the contiguous U.S.', 0, 'Cape Flattery Trail', 'Easy', '0:55:00', 1.5),
+(10, NULL, 1, 'Moderate hike to a stunning cascading waterfall near Index.', 1, 'Bridal Veil Falls', 'Medium', '2:15:00', 4.0),
+(5, 1, 1, 'Iconic Enchantments hike with turquoise alpine lake views.', 1, 'Colchuck Lake', 'Hard', '4:10:00', 8),
+(3, 1, 0, 'Coastal bluff trail with views of Puget Sound and Olympic Mountains.', 1, 'Ebey’s Landing', 'Medium', '3:00:00', 5.6),
+(6, NULL, 0, 'Popular waterfall hike with several falls and a forested trail.', 0, 'Wallace Falls', 'Medium', '2:50:00', 5.6),
+(4, 1, 0, 'Urban loop around a lake, great for walking and jogging.', NULL, 'Green Lake Trail', 'Easy', '1:25:00', 2.8),
+(4, 1, 1, 'Steep alpine hike to a fire lookout with panoramic views.', NULL, 'Mount Pilchuck', 'Medium', '2:45:00', 5.4),
+(3, NULL, NULL, 'Challenging hike with a dramatic waterfall and forested trail.', NULL, 'Teneriffe Falls', 'Medium', '2:40:00', 5.4);
 -- --------------------------------------------------------
 
 --
