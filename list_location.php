@@ -6,7 +6,7 @@ require_once 'render.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Directory</title>
+    <title>Location Directory</title>
     <link rel="stylesheet" href="base.css">
 </head>
 <body>
@@ -30,17 +30,17 @@ require_once 'render.php';
         $sql,
         $stmt,
         function ($location_id, $parent_location_id, $name, $description) {
-            return get_row_title("Location: $name (ID: $location_id)") . "<br>" .
-                   get_row_sub("Parent ID: " . ($parent_location_id ?? "None") . " — $description");
+            $title = get_row_title("Location: $name (ID: $location_id)");
+            $sub = get_row_sub("Parent ID: " . ($parent_location_id ?? "None") . " — $description");
+            $edit_link = "<a href='update_location.php?location_id=$location_id' class='edit-link'>Update</a>";
+            return "$title<br>$sub<br>$edit_link";
         },
         "LocationID",       // Primary key column
         "location",         // Table name
         false,
         $location_id, $parent_location_id, $name, $description
     );
-    
-    
-    
+
     $conn->close();
     ?>
 </div>
