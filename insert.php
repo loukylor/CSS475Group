@@ -181,11 +181,12 @@ function insert_row(mysqli $conn, string $table) {
     // Execute using user vals
     $stmt->bind_param($types, ...$values);
     $stmt->execute();
-    $conn->close();
     if ($stmt->errno !== 0) {
         echo "<p style='color:red;'>Error occurred: {$stmt->error}</p>";
     } else {
         header("Location: " . "/list_$table.php");
+        $conn->close();
+        exit();
     }
 }
 
