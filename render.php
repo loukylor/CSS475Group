@@ -19,7 +19,7 @@ function render_rows(string $sql_query, mysqli $conn, $get_row_func, &$bound_var
             
             echo "<li style='display: flex; justify-content: space-between; align-items: center; flex-direction: row;'>
         <div>
-            " . $get_row_func($clean_Var, ...$clean_vars) . "
+            " . $get_row_func($clean_var, ...$clean_vars) . "
         </div>
         <form method='POST' action='delete_user.php' style='margin-left: 1em;'>
             <input type='hidden' name='username' value='" . $clean_var . "'>
