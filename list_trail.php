@@ -65,7 +65,7 @@ require_once 'render.php';
     $open = $_GET['open'] ?? '';
     $location_id = $_GET['location_id'] ?? '';
 
-    $sql = "SELECT TrailID, Name, Description, Difficulty FROM trail where 1=1";
+    $sql = "SELECT TrailID, Name, Description, Difficulty, BikeAllowed, DogFriendly, Open FROM trail where 1=1";
     $params = [];
     $types = '';
 
@@ -115,14 +115,18 @@ require_once 'render.php';
     $stmt->execute();
     render_rows(
         $stmt,
-        function ($trail_id, $name, $description, $difficulty) {
+        function ($trail_id, $name, $description, $difficulty, $bike_allowed, $dog_friendly, $open) {
             $edit_link = "<a href='update_trail.php?id=$trail_id'>Update</a>";
-            return get_row_title("Trail #$trail_id: $name") . " [$edit_link]<br>" . get_row_sub("$difficulty — $description");
+            $bike_allowed = is_null($bike_allowed) ? 'Unknown' : ($bike_allowed ? 'Yes' : 'No');
+            $dog_friendly = is_null($dog_friendly) ? 'Unknown' : ($dog_friendly ? 'Yes' : 'No');
+            $open = is_null($open) ? 'Unknown' : ($bike_allowed ? 'Yes' : 'No');
+            return get_row_title("Trail #$trail_id: $name") . " [$edit_link]<br>" 
+                . get_row_sub("Open: $open | Dogs: $dog_friendly | Bike: $bike_allowed | $difficulty — $description");
         },
         "TrailID",     // Primary key column
         "trail",       // Table name
         false,         // is_composite = false
-        $trail_id, $name, $description, $difficulty
+        $trail_id, $name, $description, $difficulty, $bike_allowed, $dog_friendly, $open
     );
     
     
