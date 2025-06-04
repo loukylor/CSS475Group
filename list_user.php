@@ -74,8 +74,6 @@ require_once 'render.php';
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'user') {
         delete_row_from_db($conn, 'user', 'Username', $_POST['row_id']);
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
     }
     $stmt = $conn->prepare($sql);
     if (!empty($params)) {

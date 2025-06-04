@@ -63,8 +63,6 @@ require_once 'render.php';
     }
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'post') {
         delete_row_from_db($conn, 'post', 'PostID', $_POST['row_id']);
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
     }
     
 

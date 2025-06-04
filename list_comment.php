@@ -26,8 +26,6 @@ require_once 'render.php';
     $sql = "SELECT CommentID, PostID, Username, Description FROM comment";
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'comment') {
         delete_row_from_db($conn, 'comment', 'CommentID', $_POST['row_id']);
-        // header("Location: " . $_SERVER['REQUEST_URI']);
-        // exit();
     }
     
     $stmt = $conn->prepare($sql);

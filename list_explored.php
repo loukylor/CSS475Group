@@ -27,8 +27,6 @@ require_once 'render.php';
     $sql = "SELECT Username, TrailID FROM explored";
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'explored') {
         delete_composite_row_from_db($conn, 'explored', 'Username|TrailID');
-        // header("Location: " . $_SERVER['REQUEST_URI']);
-        // exit();
     }
     
     $stmt = $conn->prepare($sql);

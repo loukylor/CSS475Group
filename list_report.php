@@ -26,8 +26,6 @@ require_once 'render.php';
     $sql = "SELECT ReportID, ReporterUsername, Username, ReviewUsername, ReviewTrailID, CommentID, PostID FROM report";
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'report') {
         delete_row_from_db($conn, 'report', 'ReportID', $_POST['row_id']);
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
     }
     
     $stmt = $conn->prepare($sql);

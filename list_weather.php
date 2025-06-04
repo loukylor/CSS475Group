@@ -1,4 +1,6 @@
+
 <?php
+
 require_once 'config.inc.php';
 require_once 'render.php';
 ?>
@@ -24,12 +26,10 @@ require_once 'render.php';
     }
 
     $sql = "SELECT WeatherID, TrailID, TemperatureF, Conditions, ForDate FROM weather";
+
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'weather') {
         delete_row_from_db($conn, 'weather', 'WeatherID', $_POST['row_id']);
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
     }
-    
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     render_rows(

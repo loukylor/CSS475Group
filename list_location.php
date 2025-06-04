@@ -26,8 +26,6 @@ require_once 'render.php';
     $sql = "SELECT LocationID, ParentLocationID, Name, Description FROM location";
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'location') {
         delete_row_from_db($conn, 'location', 'LocationID', $_POST['row_id']);
-        header("Location: " . $_SERVER['REQUEST_URI']);
-        exit();
     }
     
     $stmt = $conn->prepare($sql);
