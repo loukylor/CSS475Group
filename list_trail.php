@@ -19,8 +19,7 @@ require_once 'render.php';
     
     <h3>Filter Table</h3>
     <form method="GET" action="list_trail.php">
-    <label for="name">Trail Name:</label>
-    <input type="text" name="name" value="<?= htmlspecialchars($_GET['name'] ?? '') ?>">
+    <input type="text" name="name" placeholder="Trail Name" value="<?= htmlspecialchars($_GET['name'] ?? '') ?>">
     |
     <label for="difficulty">Difficulty:</label>
     <select name="difficulty">
@@ -48,8 +47,7 @@ require_once 'render.php';
     <!-- <label for="location_id">Location ID:</label>
     <input type="number" name="location_id" value="<?php //htmlspecialchars($_GET['location_id'] ?? '') ?>"> -->
 
-    <label for="location_name">Location Name</label>
-    <input type="text" name="location_name" value="<?= htmlspecialchars($_GET['location_name'] ?? '') ?>" />
+    <input type="text" name="location_name" placeholder="Location Name" value="<?= htmlspecialchars($_GET['location_name'] ?? '') ?>" />
 
     <br>
 
@@ -57,27 +55,26 @@ require_once 'render.php';
     <input type="checkbox" name="do_sort" <?= (isset($_GET['do_sort']) ? 'checked' : '') ?> />
     <label for="order_by">Order by:</label>
     <select name="order_by">">
-        <option value="location.Name" <?= $_GET['order_by'] === "location.Name" ? 'selected' : '' ?>>Location Name</option>
-        <option value="TrailID" <?= $_GET['order_by'] === "TrailID" ? 'selected' : '' ?>>TrailID</option>
-        <option value="Name" <?= $_GET['order_by'] === "Name" ? 'selected' : '' ?>>Name</option>
-        <option value="Description" <?= $_GET['order_by'] === "Description" ? 'selected' : '' ?>>Description</option>
-        <option value="Difficulty" <?= $_GET['order_by'] === "Difficulty" ? 'selected' : '' ?>>Difficulty</option>
-        <option value="BikeAllowed" <?= $_GET['order_by'] === "BikeAllowed" ? 'selected' : '' ?>>BikeAllowed</option>
-        <option value="DogFriendly" <?= $_GET['order_by'] === "DogFriendly" ? 'selected' : '' ?>>DogFriendly</option>
-        <option value="Open" <?= $_GET['order_by'] === "Open" ? 'selected' : '' ?>>Open</option>
+        <option value="location.Name" <?= ($_GET['order_by'] ?? '') === "location.Name" ? 'selected' : '' ?>>Location Name</option>
+        <option value="TrailID" <?= ($_GET['order_by'] ?? '') === "TrailID" ? 'selected' : '' ?>>TrailID</option>
+        <option value="Name" <?= ($_GET['order_by'] ?? '') === "Name" ? 'selected' : '' ?>>Name</option>
+        <option value="Description" <?= ($_GET['order_by'] ?? '') === "Description" ? 'selected' : '' ?>>Description</option>
+        <option value="Difficulty" <?= ($_GET['order_by'] ?? '') === "Difficulty" ? 'selected' : '' ?>>Difficulty</option>
+        <option value="BikeAllowed" <?= ($_GET['order_by'] ?? '') === "BikeAllowed" ? 'selected' : '' ?>>BikeAllowed</option>
+        <option value="DogFriendly" <?= ($_GET['order_by'] ?? '') === "DogFriendly" ? 'selected' : '' ?>>DogFriendly</option>
+        <option value="Open" <?= ($_GET['order_by'] ?? '') === "Open" ? 'selected' : '' ?>>Open</option>
     </select>
     <label for="order">Ascending?:</label>
     <input type="checkbox" name="order" value="<?= htmlspecialchars($_GET['order'] ?? '') ?>" />
     |
-    <label for="limit">Limit</label>
-    <input type="number" name="limit" value="<?= htmlspecialchars($_GET['limit'] ?? '') ?>" />
+    <input type="number" name="Limit" placeholder="limit" value="<?= htmlspecialchars($_GET['limit'] ?? '') ?>" />
     |
     <button type="submit">Filter</button>
     <button type="reset" onclick="window.location.href='list_trail.php';">Clear</button>
 </form>
 
     <?php
-    $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
+    $conn = new mysqli($servername, $username, $password, $database, $port);
 
     if ($conn->connect_error) {
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
@@ -91,7 +88,7 @@ require_once 'render.php';
     $dog = $_GET['dog'] ?? '';
     $open = $_GET['open'] ?? '';
     $join = ' JOIN location ON location.LocationID = trail.LocationID ';
-    if ($_GET['location_name'] !== '') {
+    if ($_GET['location_name'] ?? '' !== '') {
         $join = ' JOIN location ON location.name=? ';
         $types .= 's';
         $params[] = $_GET['location_name'];
@@ -139,8 +136,7 @@ require_once 'render.php';
     
     $sql .= $sort . $limit;
     $stmt = $conn->prepare($sql);
-    echo $sql;
-    echo $conn->error;
+
     if ($types && $params) {
         $stmt->bind_param($types, ...$params);
     }
