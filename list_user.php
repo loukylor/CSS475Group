@@ -20,10 +20,32 @@ require_once 'render.php';
     <h3>Filter Table</h3>
     <form method="GET" action="list_user.php">
         <input type="text" name="user_name" placeholder="Username" value="<?= htmlspecialchars($_GET['user_name'] ?? '') ?>">
+        |
         <input type="text" name="first_name" placeholder="First Name" value="<?= htmlspecialchars($_GET['first_name'] ?? '') ?>">
+        |
         <input type="text" name="last_name" placeholder="Last Name" value="<?= htmlspecialchars($_GET['last_name'] ?? '') ?>">
+        |
         <input type="text" name="email" placeholder="Email" value="<?= htmlspecialchars($_GET['email'] ?? '') ?>">
+        |
         <input type="number" name="credibility" placeholder="Min Credibility" value="<?= htmlspecialchars($_GET['credibility'] ?? '') ?>">
+
+        <br>
+        
+        <label for="do_sort">Sort?:</label>
+        <input type="checkbox" name="do_sort" <?= (isset($_GET['do_sort']) ? 'checked' : '') ?> />
+        <label for="order_by">Order by:</label>
+        <select name="order_by">">
+            <option value="Username" <?= $_GET['order_by'] === "Username" ? 'selected' : '' ?>>Username</option>
+            <option value="FirstName" <?= $_GET['order_by'] === "FirstName" ? 'selected' : '' ?>>FirstName</option>
+            <option value="LastName" <?= $_GET['order_by'] === "LastName" ? 'selected' : '' ?>>LastName</option>
+            <option value="Email" <?= $_GET['order_by'] === "Email" ? 'selected' : '' ?>>Email</option>
+            <option value="Credibility" <?= $_GET['order_by'] === "Credibility" ? 'selected' : '' ?>>Credibility</option>
+        </select>
+        <label for="order">Ascending?:</label>
+        <input type="checkbox" name="order" <?= (isset($_GET['order']) ? 'checked' : '') ?> />
+        |
+        <input type="number" placeholder="Limit" name="limit" value="<?= htmlspecialchars($_GET['limit'] ?? '') ?>" />
+        |
         <button type="submit">Filter</button>
         <button type="reset" onclick="window.location.href='list_user.php';">Clear</button>
     </form>
@@ -38,6 +60,10 @@ require_once 'render.php';
     $email = $_GET['email'] ?? '';
     $username = $_GET['user_name'] ?? '';
     $credibility = $_GET['credibility'] ?? '';
+
+    $order = isset($_GET['order']) ? 'ASC' : 'DESC';
+    $sort = isset($_GET['do_sort']) ? " ORDER BY {$_GET['order_by']} $order" : '';
+    $limit = (($_GET['limit'] ?? '') !== '') ? " LIMIT {$_GET['limit']}" : '';
 
     // Start base query
     $sql = "SELECT Username, FirstName, LastName, Email, Credibility FROM user WHERE 1=1";
@@ -75,6 +101,9 @@ require_once 'render.php';
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'user') {
         delete_row_from_db($conn, 'user', 'Username', $_POST['row_id']);
     }
+
+    $sql .= $sort . $limit;
+
     $stmt = $conn->prepare($sql);
     if (!empty($params)) {
         $stmt->bind_param($types, ...$params);

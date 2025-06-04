@@ -20,9 +20,29 @@ require_once 'render.php';
     <h3>Filter Table</h3>
     <form method="GET" action="list_post.php">
     <input type="text" name="username" placeholder="Username" value="<?= htmlspecialchars($_GET['username'] ?? '') ?>">
+    |
     <input type="text" name="title" placeholder="Title" value="<?= htmlspecialchars($_GET['title'] ?? '') ?>">
+    |
     <input type="number" name="trail_id" placeholder="Trail ID" value="<?= htmlspecialchars($_GET['trail_id'] ?? '') ?>">
+    |
     <input type="number" name="post_id" placeholder="Post ID" value="<?= htmlspecialchars($_GET['post_id'] ?? '') ?>">
+    
+    <br>
+    
+    <label for="do_sort">Sort?:</label>
+    <input type="checkbox" name="do_sort" <?= (isset($_GET['do_sort']) ? 'checked' : '') ?> />
+    <label for="order_by">Order by:</label>
+    <select name="order_by">">
+        <option value="Username" <?= $_GET['order_by'] === "Username" ? 'selected' : '' ?>>Username</option>
+        <option value="Title" <?= $_GET['order_by'] === "Title" ? 'selected' : '' ?>>Title</option>
+        <option value="TrailID" <?= $_GET['order_by'] === "TrailID" ? 'selected' : '' ?>>TrailID</option>
+        <option value="PostID" <?= $_GET['order_by'] === "PostID" ? 'selected' : '' ?>>PostID</option>
+    </select>
+    <label for="order">Ascending?:</label>
+    <input type="checkbox" name="order" <?= (isset($_GET['order']) ? 'checked' : '') ?> />
+    |
+    <input type="number" placeholder="Limit" name="limit" value="<?= htmlspecialchars($_GET['limit'] ?? '') ?>" />
+    |
     <button type="submit">Filter</button>
     <button type="reset" onclick="window.location.href='list_post.php';">Clear</button>
 </form>
@@ -36,6 +56,10 @@ require_once 'render.php';
     $title = $_GET['title'] ?? '';
     $trail_id = $_GET['trail_id'] ?? '';
     $post_id = $_GET['post_id'] ?? '';
+    
+    $order = isset($_GET['order']) ? 'ASC' : 'DESC';
+    $sort = isset($_GET['do_sort']) ? " ORDER BY {$_GET['order_by']} $order" : '';
+    $limit = (($_GET['limit'] ?? '') !== '') ? " LIMIT {$_GET['limit']}" : '';
 
     $sql = "SELECT PostID, UserName, TrailID, Title, Description FROM post WHERE 1=1";
     $params = [];
@@ -65,6 +89,7 @@ require_once 'render.php';
         delete_row_from_db($conn, 'post', 'PostID', $_POST['row_id']);
     }
     
+    $sql .= $sort . $limit;
 
     $stmt = $conn->prepare($sql);
     if ($types && $params) {

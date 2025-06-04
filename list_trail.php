@@ -65,7 +65,7 @@ require_once 'render.php';
         <option value="Open" <?= ($_GET['order_by'] ?? '') === "Open" ? 'selected' : '' ?>>Open</option>
     </select>
     <label for="order">Ascending?:</label>
-    <input type="checkbox" name="order" value="<?= htmlspecialchars($_GET['order'] ?? '') ?>" />
+    <input type="checkbox" name="order" <?= (isset($_GET['order']) ? 'checked' : '') ?> />
     |
     <input type="number" name="Limit" placeholder="limit" value="<?= htmlspecialchars($_GET['limit'] ?? '') ?>" />
     |
