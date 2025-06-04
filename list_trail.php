@@ -119,9 +119,11 @@ require_once 'render.php';
             $edit_link = "<a href='update_trail.php?id=$trail_id'>Update</a>";
             $bike_allowed = is_null($bike_allowed) ? 'Unknown' : ($bike_allowed ? 'Yes' : 'No');
             $dog_friendly = is_null($dog_friendly) ? 'Unknown' : ($dog_friendly ? 'Yes' : 'No');
-            $open = is_null($open) ? 'Unknown' : ($bike_allowed ? 'Yes' : 'No');
+            $open = is_null($open) ? 'Unknown' : ($open ? 'Yes' : 'No');
+            
             return get_row_title("Trail #$trail_id: $name") . " [$edit_link]<br>" 
-                . get_row_sub("Open: $open | Dogs: $dog_friendly | Bike: $bike_allowed | $difficulty — $description");
+                 . get_row_sub("Open: $open | Dogs: $dog_friendly | Bike: $bike_allowed | $difficulty — $description");
+            
         },
         "TrailID",     // Primary key column
         "trail",       // Table name
