@@ -43,14 +43,16 @@ function render_rows(
         }
 
         echo "<li style='display: flex; justify-content: space-between; align-items: center; flex-direction: row;'>
-            <div>" . $get_row_func(...$row_data) . "</div>
-            <form method='POST' style='margin-left: 1em;' onsubmit=\"return confirm('Delete this row?');\">
+            <div>" . $get_row_func(...$row_data) . "</div>";
+        if (!empty($primary_key_column)) {
+            echo "<form method='POST' style='margin-left: 1em;' onsubmit=\"return confirm('Delete this row?');\">
                 <input type='hidden' name='row_id' value='" . $row_id . "'>
                 <input type='hidden' name='table' value='" . $table_name . "'>
                 $form_fields
                 <button type='submit' class='delete-btn'>Delete</button>
-            </form>
-          </li>";
+            </form>";
+        }
+        echo "</li>";
     }
     echo "</ul>";
 }

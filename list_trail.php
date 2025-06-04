@@ -67,7 +67,29 @@ require_once 'render.php';
     <label for="order">Ascending?:</label>
     <input type="checkbox" name="order" <?= (isset($_GET['order']) ? 'checked' : '') ?> />
     |
-    <input type="number" name="Limit" placeholder="limit" value="<?= htmlspecialchars($_GET['limit'] ?? '') ?>" />
+    <input type="number" name="limit" placeholder="Limit" value="<?= htmlspecialchars($_GET['limit'] ?? '') ?>" />
+    |
+    <label for="aggregate">Aggregate?:</label>
+    <input type="checkbox" name="aggregate" <?= (isset($_GET['aggregate']) ? 'checked' : '') ?> />
+    <select name="agg_attr">">
+        <option value="location.Name" <?= ($_GET['agg_attr'] ?? '') === "location.Name" ? 'selected' : '' ?>>Location Name</option>
+        <option value="TrailID" <?= ($_GET['agg_attr'] ?? '') === "TrailID" ? 'selected' : '' ?>>TrailID</option>
+        <option value="Name" <?= ($_GET['agg_attr'] ?? '') === "Name" ? 'selected' : '' ?>>Name</option>
+        <option value="Description" <?= ($_GET['agg_attr'] ?? '') === "Description" ? 'selected' : '' ?>>Description</option>
+        <option value="Difficulty" <?= ($_GET['agg_attr'] ?? '') === "Difficulty" ? 'selected' : '' ?>>Difficulty</option>
+        <option value="BikeAllowed" <?= ($_GET['agg_attr'] ?? '') === "BikeAllowed" ? 'selected' : '' ?>>BikeAllowed</option>
+        <option value="DogFriendly" <?= ($_GET['agg_attr'] ?? '') === "DogFriendly" ? 'selected' : '' ?>>DogFriendly</option>
+        <option value="Open" <?= ($_GET['agg_attr'] ?? '') === "Open" ? 'selected' : '' ?>>Open</option>
+        <option value="Duration" <?= ($_GET['agg_attr'] ?? '') === "Duration" ? 'selected' : '' ?>>Duration</option>
+        <option value="Length" <?= ($_GET['agg_attr'] ?? '') === "Length" ? 'selected' : '' ?>>Length</option>
+    </select>
+    <select name="agg_func">">
+        <option value="MAX" <?= ($_GET['agg_func'] ?? '') === "MAX" ? 'selected' : '' ?>>MAX</option>
+        <option value="MIN" <?= ($_GET['agg_func'] ?? '') === "MIN" ? 'selected' : '' ?>>MIN</option>
+        <option value="AVG" <?= ($_GET['agg_func'] ?? '') === "AVG" ? 'selected' : '' ?>>AVG</option>
+        <option value="SUM" <?= ($_GET['agg_func'] ?? '') === "SUM" ? 'selected' : '' ?>>SUM</option>
+        <option value="COUNT" <?= ($_GET['agg_func'] ?? '') === "COUNT" ? 'selected' : '' ?>>COUNT</option>
+    </select>
     |
     <button type="submit">Filter</button>
     <button type="reset" onclick="window.location.href='list_trail.php';">Clear</button>
@@ -93,12 +115,18 @@ require_once 'render.php';
         $types .= 's';
         $params[] = $_GET['location_name'];
     }
+    $group_by = isset($_GET['aggregate']) ? " GROUP BY location.Name " : '';
     $order = isset($_GET['order']) ? 'ASC' : 'DESC';
     $sort = isset($_GET['do_sort']) ? " ORDER BY {$_GET['order_by']} $order" : '';
     $limit = (($_GET['limit'] ?? '') !== '') ? " LIMIT {$_GET['limit']}" : '';
 
-    $sql = "SELECT location.Name, TrailID, trail.Name, trail.Description, Difficulty, BikeAllowed, DogFriendly, Open FROM trail "
-            . "{$join}WHERE 1=1";
+    if (isset($_GET['aggregate'])) {
+        $sql = "SELECT location.Name, {$_GET['agg_func']}({$_GET['agg_attr']}) FROM trail "
+        . "{$join}WHERE 1=1";
+    } else {
+        $sql = "SELECT location.Name, TrailID, trail.Name, trail.Description, Difficulty, BikeAllowed, DogFriendly, Open, Duration, Length FROM trail "
+                . "{$join}WHERE 1=1";
+    }
 
     if ($name) {
         $sql .= " AND Name LIKE ?";
@@ -134,30 +162,48 @@ require_once 'render.php';
         delete_row_from_db($conn, 'trail', 'TrailID', $_POST['row_id']);
     }
     
-    $sql .= $sort . $limit;
+    $sql .= $group_by . $sort . $limit;
     $stmt = $conn->prepare($sql);
+    echo $conn->error;
 
     if ($types && $params) {
         $stmt->bind_param($types, ...$params);
     }
     $stmt->execute();
-    render_rows(
-        $stmt,
-        function ($location_name, $trail_id, $name, $description, $difficulty, $bike_allowed, $dog_friendly, $open) {
-            $edit_link = "<a href='update_trail.php?id=$trail_id'>Update</a>";
-            $bike_allowed = is_null($bike_allowed) ? 'Unknown' : ($bike_allowed ? 'Yes' : 'No');
-            $dog_friendly = is_null($dog_friendly) ? 'Unknown' : ($dog_friendly ? 'Yes' : 'No');
-            $open = is_null($open) ? 'Unknown' : ($open ? 'Yes' : 'No');
-            
-            return get_row_title("Trail #$trail_id: $name in $location_name") . " [$edit_link]<br>" 
-                 . get_row_sub("Open: $open | Dogs: $dog_friendly | Bike: $bike_allowed | $difficulty — $description");
-            
-        },
-        "TrailID",     // Primary key column
-        "trail",       // Table name
-        false,         // is_composite = false
-        $location_name, $trail_id, $name, $description, $difficulty, $bike_allowed, $dog_friendly, $open
-    );
+
+    if ($_GET['aggregate']) {
+        render_rows(
+            $stmt,
+            function ($location_name, $agg) {
+                return get_row_title("Location: $location_name") . '<br>'
+                    . get_row_sub("{$_GET['agg_func']}({$_GET['agg_attr']}): $agg");
+                
+            },
+            "",     // Primary key column
+            "trail",       // Table name
+            false,         // is_composite = false
+            $location_name, $agg,
+        );
+    } else {
+        render_rows(
+            $stmt,
+            function ($location_name, $trail_id, $name, $description, $difficulty, $bike_allowed, $dog_friendly, $open, $duration, $length) {
+                $edit_link = "<a href='update_trail.php?id=$trail_id'>Update</a>";
+                $bike_allowed = is_null($bike_allowed) ? 'Unknown' : ($bike_allowed ? 'Yes' : 'No');
+                $dog_friendly = is_null($dog_friendly) ? 'Unknown' : ($dog_friendly ? 'Yes' : 'No');
+                $open = is_null($open) ? 'Unknown' : ($open ? 'Yes' : 'No');
+                
+                return get_row_title("Trail #$trail_id: $name in $location_name") . " [$edit_link]<br>" 
+                    . get_row_sub("Open: $open | Dogs: $dog_friendly | Bike: $bike_allowed | $duration | $length miles | $difficulty — $description");
+                
+            },
+            "TrailID",     // Primary key column
+            "trail",       // Table name
+            false,         // is_composite = false
+            $location_name, $trail_id, $name, $description, $difficulty, $bike_allowed, $dog_friendly, $open, $duration, $length
+        );
+    }
+
     
     
     
