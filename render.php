@@ -60,9 +60,9 @@ function render_rows(
                     <button type='submit' class='delete-btn'>Delete</button>
                 </form>
               </li>";
-        //}
+        }
         echo "</ul>";
-    }
+    //}
 }
 
 

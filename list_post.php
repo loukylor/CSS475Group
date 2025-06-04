@@ -16,6 +16,8 @@ require_once 'render.php';
 <div>
     <h2>Post Directory</h2>
     <a href="./insert.php?table=post">Insert into table</a>
+    
+    <h3>Filter Table</h3>
     <form method="GET" action="list_post.php">
     <input type="text" name="username" placeholder="Username" value="<?= htmlspecialchars($_GET['username'] ?? '') ?>">
     <input type="text" name="title" placeholder="Title" value="<?= htmlspecialchars($_GET['title'] ?? '') ?>">

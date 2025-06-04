@@ -16,6 +16,8 @@ require_once 'render.php';
 <div>
     <h2>Trail Directory</h2>
     <a href="./insert.php?table=trail">Insert into table</a>
+    
+    <h3>Filter Table</h3>
     <form method="GET" action="list_trail.php">
     <label for="name">Trail Name:</label>
     <input type="text" name="name" value="<?= htmlspecialchars($_GET['name'] ?? '') ?>">

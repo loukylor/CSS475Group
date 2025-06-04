@@ -16,6 +16,8 @@ require_once 'render.php';
 <div>
     <h2>User Directory</h2>
     <a href="./insert.php?table=user">Insert into table</a>
+
+    <h3>Filter Table</h3>
     <form method="GET" action="list_user.php">
         <input type="text" name="user_name" placeholder="Username" value="<?= htmlspecialchars($_GET['user_name'] ?? '') ?>">
         <input type="text" name="first_name" placeholder="First Name" value="<?= htmlspecialchars($_GET['first_name'] ?? '') ?>">
@@ -75,7 +77,6 @@ require_once 'render.php';
         $stmt->bind_param($types, ...$params);
     }
     $stmt->execute();
-    echo($sql);
     render_rows(
         $sql,
         $stmt,
