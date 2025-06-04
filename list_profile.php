@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Directory</title>
+    <title>Profile Directory</title>
     <link rel="stylesheet" href="base.css">
 </head>
 <body>

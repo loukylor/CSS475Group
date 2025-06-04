@@ -8,7 +8,7 @@ require_once 'render.php';
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>User Directory</title>
+    <title>Weather Directory</title>
     <link rel="stylesheet" href="base.css">
 </head>
 <body>
