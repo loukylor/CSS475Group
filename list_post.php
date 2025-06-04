@@ -37,7 +37,7 @@ require_once 'render.php';
     $trail_id = $_GET['trail_id'] ?? '';
     $post_id = $_GET['post_id'] ?? '';
 
-    $sql = "SELECT PostID, UserName, TrailID, Title FROM post WHERE 1=1";
+    $sql = "SELECT PostID, UserName, TrailID, Title, Description FROM post WHERE 1=1";
     $params = [];
     $types = '';
 
@@ -75,16 +75,16 @@ require_once 'render.php';
     $post_id = $username = $trail_id = $title = null;
     render_rows(
         $stmt,
-        function ($post_id, $username, $trail_id, $title) {
+        function ($post_id, $username, $trail_id, $title, $description) {
             $content = get_row_title("Post #$post_id — $title") . "<br>" .
-                       get_row_sub("By $username on Trail #$trail_id");
+                       get_row_sub("By $username on Trail #$trail_id - $description");
             $edit_link = "<a href='update_post.php?postid=$post_id' class='edit-link'>Update</a>";
             return $content . "<br>" . $edit_link;
         },
         "PostID",         // Primary key column
         "post",           // Table name
         false,
-        $post_id, $username, $trail_id, $title
+        $post_id, $username, $trail_id, $title, $description
     );
 
     $conn->close();

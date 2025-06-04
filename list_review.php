@@ -24,7 +24,7 @@ require_once 'render.php';
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
 
-    $sql = "SELECT Username, TrailID, Title, Score FROM review";
+    $sql = "SELECT Username, TrailID, Title, Score, Description FROM review";
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'review') {
         delete_composite_row_from_db($conn, 'review', 'Username|TrailID');
     }
@@ -33,18 +33,18 @@ require_once 'render.php';
     $stmt->execute();
     render_rows(
         $stmt,
-        function ($username, $trail_id, $title, $score) {
+        function ($username, $trail_id, $title, $score, $description) {
             // URL encode to avoid issues with special chars
             $edit_url = "update_review.php?username=" . urlencode($username) . "&trailid=" . urlencode($trail_id);
 
             return get_row_title("Review: $title") . "<br>" .
-                   get_row_sub("User: $username | Trail: $trail_id | Score: $score/5") .
+                   get_row_sub("User: $username | Trail: $trail_id | Score: $score/5 - $description") .
                    "<br><a href='$edit_url' style='color:blue;'>Update</a>";
         },
         "Username|TrailID",   // Composite key
         "review",             // Table name
         True,
-        $username, $trail_id, $title, $score
+        $username, $trail_id, $title, $score, $description
     );
 
     $conn->close();
