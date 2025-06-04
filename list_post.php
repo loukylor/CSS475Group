@@ -26,6 +26,8 @@ require_once 'render.php';
     <input type="number" name="trail_id" placeholder="Trail ID" value="<?= htmlspecialchars($_GET['trail_id'] ?? '') ?>">
     |
     <input type="number" name="post_id" placeholder="Post ID" value="<?= htmlspecialchars($_GET['post_id'] ?? '') ?>">
+    |
+    <input type="text" name="after" pattern = "\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}" placeholder="After date (YYYY-MM-DD HH:MM:SS)" value="<?= htmlspecialchars($_GET['after'] ?? '') ?>">
     
     <br>
     
@@ -33,10 +35,11 @@ require_once 'render.php';
     <input type="checkbox" name="do_sort" <?= (isset($_GET['do_sort']) ? 'checked' : '') ?> />
     <label for="order_by">Order by:</label>
     <select name="order_by">">
-        <option value="Username" <?= $_GET['order_by'] === "Username" ? 'selected' : '' ?>>Username</option>
-        <option value="Title" <?= $_GET['order_by'] === "Title" ? 'selected' : '' ?>>Title</option>
-        <option value="TrailID" <?= $_GET['order_by'] === "TrailID" ? 'selected' : '' ?>>TrailID</option>
-        <option value="PostID" <?= $_GET['order_by'] === "PostID" ? 'selected' : '' ?>>PostID</option>
+        <option value="Username" <?= ($_GET['order_by'] ?? '') === "Username" ? 'selected' : '' ?>>Username</option>
+        <option value="PostDate" <?= ($_GET['order_by'] ?? '') === "PostDate" ? 'selected' : '' ?>>PostDate</option>
+        <option value="Title" <?= ($_GET['order_by'] ?? '') === "Title" ? 'selected' : '' ?>>Title</option>
+        <option value="TrailID" <?= ($_GET['order_by'] ?? '') === "TrailID" ? 'selected' : '' ?>>TrailID</option>
+        <option value="PostID" <?= ($_GET['order_by'] ?? '') === "PostID" ? 'selected' : '' ?>>PostID</option>
     </select>
     <label for="order">Ascending?:</label>
     <input type="checkbox" name="order" <?= (isset($_GET['order']) ? 'checked' : '') ?> />
@@ -47,7 +50,7 @@ require_once 'render.php';
     <button type="reset" onclick="window.location.href='list_post.php';">Clear</button>
 </form>
     <?php
-    $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
+    $conn = new mysqli($servername, $username, $password, $database, $port);
 
     if ($conn->connect_error) {
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
@@ -56,12 +59,13 @@ require_once 'render.php';
     $title = $_GET['title'] ?? '';
     $trail_id = $_GET['trail_id'] ?? '';
     $post_id = $_GET['post_id'] ?? '';
+    $after = $_GET['after'] ?? '';
     
     $order = isset($_GET['order']) ? 'ASC' : 'DESC';
     $sort = isset($_GET['do_sort']) ? " ORDER BY {$_GET['order_by']} $order" : '';
     $limit = (($_GET['limit'] ?? '') !== '') ? " LIMIT {$_GET['limit']}" : '';
 
-    $sql = "SELECT PostID, UserName, TrailID, Title, Description FROM post WHERE 1=1";
+    $sql = "SELECT PostID, UserName, TrailID, Title, Description, PostDate FROM post WHERE 1=1";
     $params = [];
     $types = '';
 
@@ -85,6 +89,11 @@ require_once 'render.php';
         $params[] = $post_id;
         $types .= 'i';
     }
+    if (!empty($after)) {
+        $sql .= " AND PostDate >= ?";
+        $params[] = $after;
+        $types .= 's';
+    }
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'post') {
         delete_row_from_db($conn, 'post', 'PostID', $_POST['row_id']);
     }
@@ -100,8 +109,8 @@ require_once 'render.php';
     $post_id = $username = $trail_id = $title = null;
     render_rows(
         $stmt,
-        function ($post_id, $username, $trail_id, $title, $description) {
-            $content = get_row_title("Post #$post_id — $title") . "<br>" .
+        function ($post_id, $username, $trail_id, $title, $description, $post_date) {
+            $content = get_row_title("Post #$post_id — $title at $post_date") . "<br>" .
                        get_row_sub("By $username on Trail #$trail_id - $description");
             $edit_link = "<a href='update_post.php?postid=$post_id' class='edit-link'>Update</a>";
             return $content . "<br>" . $edit_link;
@@ -109,7 +118,7 @@ require_once 'render.php';
         "PostID",         // Primary key column
         "post",           // Table name
         false,
-        $post_id, $username, $trail_id, $title, $description
+        $post_id, $username, $trail_id, $title, $description, $post_date
     );
 
     $conn->close();
