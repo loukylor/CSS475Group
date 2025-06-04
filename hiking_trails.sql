@@ -156,7 +156,7 @@ VALUES
 (6, 1, 0, 'Short trail to the northwesternmost point in the contiguous U.S.', 0, 'Cape Flattery Trail', 'Easy', '0:55:00', 1.5),
 (10, NULL, 1, 'Moderate hike to a stunning cascading waterfall near Index.', 1, 'Bridal Veil Falls', 'Medium', '2:15:00', 4.0),
 (5, 1, 1, 'Iconic Enchantments hike with turquoise alpine lake views.', 1, 'Colchuck Lake', 'Hard', '4:10:00', 8),
-(3, 1, 0, 'Coastal bluff trail with views of Puget Sound and Olympic Mountains.', 1, 'Ebey’s Landing', 'Medium', '3:00:00', 5.6),
+(3, 1, 0, 'Coastal bluff trail with views of Puget Sound and Olympic Mountains.', 1, 'Ebeys Landing', 'Medium', '3:00:00', 5.6),
 (6, NULL, 0, 'Popular waterfall hike with several falls and a forested trail.', 0, 'Wallace Falls', 'Medium', '2:50:00', 5.6),
 (4, 1, 0, 'Urban loop around a lake, great for walking and jogging.', NULL, 'Green Lake Trail', 'Easy', '1:25:00', 2.8),
 (4, 1, 1, 'Steep alpine hike to a fire lookout with panoramic views.', NULL, 'Mount Pilchuck', 'Medium', '2:45:00', 5.4),

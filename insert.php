@@ -94,12 +94,12 @@ function render_insert_form(mysqli $conn, string $table) {
 
         echo "<div class=\"insert-input-div\">";
         if ($is_required === '') {
-            echo "<label class=\"empty-label\" name=\"{$col['Field']}-null\">Leave null?</label>";
-            echo "<input class=\"empty-input\" name=\"{$col['Field']}-null\" for=\"{$col['Field']}-null\" type=\"checkbox\" />";
+            echo "<label class=\"empty-label\" for=\"{$col['Field']}-null\">Leave null?</label>";
+            echo "<input class=\"empty-input\" name=\"{$col['Field']}-null\" type=\"checkbox\" />";
         }
         
-        echo "<label class=\"insert-label\" name=\"{$col['Field']}\">{$col['Field']}{$suffix}:</label>";
-        echo "<input class=\"insert-input\" name=\"{$col['Field']}\" for=\"{$col['Field']}\""
+        echo "<label class=\"insert-label\" fild=\"{$col['Field']}\">{$col['Field']}{$suffix}:</label>";
+        echo "<input class=\"insert-input\" name=\"{$col['Field']}\""
             . " {$is_required}"
             . " {$length}"
             . " {$pattern}"
@@ -124,7 +124,7 @@ function insert_row(mysqli $conn, string $table) {
 
     foreach ($cols as $col) {
         // use default is not set
-        if (!isset($_POST[$col['Field']])) {
+        if (!isset($_POST[$col['Field']]) && $col['Type'] !== 'bit(1)') {
             continue;
         }
         $field_names[] = $col['Field'];
@@ -139,7 +139,7 @@ function insert_row(mysqli $conn, string $table) {
                 break;
             case 'bit(1)':
                 $types .= 'i';
-                $value = $value ? 0 : 1;
+                $value = isset($value) ? 1 : 0;
                 break;
             case 'float':
                 $types .= 'd';
