@@ -20,6 +20,7 @@
     <a href="list_weather.php">List Weather</a>
     <a href="list_location.php">List Location</a>
     <a href="list_report.php">List Report</a>
+    <a href="account_reports.php">List Users by Reports</a>
 
 
 
