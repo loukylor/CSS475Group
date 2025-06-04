@@ -65,7 +65,10 @@ require_once 'render.php';
     $sort = isset($_GET['do_sort']) ? " ORDER BY {$_GET['order_by']} $order" : '';
     $limit = (($_GET['limit'] ?? '') !== '') ? " LIMIT {$_GET['limit']}" : '';
 
-    $sql = "SELECT PostID, UserName, TrailID, Title, Description, PostDate FROM post WHERE 1=1";
+    $sql = "SELECT p.PostID, p.UserName, p.TrailID, t.Name AS TrailName, p.Title, p.Description
+        FROM post p
+        JOIN trail t ON p.TrailID = t.TrailID
+        WHERE 1=1";
     $params = [];
     $types = '';
 
@@ -106,20 +109,21 @@ require_once 'render.php';
     }
 
     $stmt->execute();
-    $post_id = $username = $trail_id = $title = null;
+    $post_id = $username = $trail_id = $trail_name = $title = $description = null;
     render_rows(
         $stmt,
-        function ($post_id, $username, $trail_id, $title, $description, $post_date) {
-            $content = get_row_title("Post #$post_id — $title at $post_date") . "<br>" .
-                       get_row_sub("By $username on Trail #$trail_id - $description");
+        function ($post_id, $username, $trail_id, $trail_name, $title, $description) {
+            $content = get_row_title("Post #$post_id — $title") . "<br>" .
+                       get_row_sub("By $username on $trail_name - $description");
             $edit_link = "<a href='update_post.php?postid=$post_id' class='edit-link'>Update</a>";
             return $content . "<br>" . $edit_link;
         },
-        "PostID",         // Primary key column
-        "post",           // Table name
+        "PostID",
+        "post",
         false,
-        $post_id, $username, $trail_id, $title, $description, $post_date
+        $post_id, $username, $trail_id, $trail_name, $title, $description
     );
+    
 
     $conn->close();
     ?>
