@@ -57,7 +57,6 @@ $row = $result->fetch_assoc();
         <input type="submit" value="Update Location">
     </form>
     <br>
-    <a href="location.php">Back to Location Directory</a>
 </div>
 
 </body>

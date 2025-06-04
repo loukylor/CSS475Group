@@ -68,8 +68,7 @@ $row = $result->fetch_assoc();
 
         <input type="submit" value="Update User">
     </form>
-    <br>
-    <a href="user.php">Back to User Directory</a>
+    <br> 
 </div>
 
 </body>
