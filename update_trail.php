@@ -1,7 +1,6 @@
 <?php
 require_once 'config.inc.php';
 
-// Get Trail ID from query
 $id = $_GET['id'] ?? null;
 if ($id === "" || $id === false || $id === null) {
     header('location: list_trail.php');
@@ -25,18 +24,16 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-
     $name = trim($_POST['Name'] ?? "");
     $description = trim($_POST['Description'] ?? "");
     $difficulty = $_POST['Difficulty'] ?? "Medium";
     $duration = $_POST['Duration'] ?? "";
     $length = $_POST['Length'] ?? "";
-   
     $open = isset($_POST['Open']) ? 1 : 0;
+    $dog_friendly = isset($_POST['DogFriendly']) ? 1 : 0;
+    $bike_allowed = isset($_POST['BikeAllowed']) ? 1 : 0;
 
-    
     $errors = [];
     if ($name === "") {
         $errors[] = "Trail Name cannot be empty.";
@@ -56,13 +53,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             echo "<div style='color:red;'>$err</div>";
         }
     } else {
-        $sql = "UPDATE trail SET Name = ?, Description = ?, Difficulty = ?, Duration = ?, Length = ?, Open = ? WHERE TrailID = ?";
+        $sql = "UPDATE trail SET Name = ?, Description = ?, Difficulty = ?, Duration = ?, Length = ?, Open = ?, DogFriendly = ?, BikeAllowed = ? WHERE TrailID = ?";
         $stmt = $conn->stmt_init();
         if (!$stmt->prepare($sql)) {
             echo "<div style='color:red;'>Failed to prepare SQL statement.</div>";
         } else {
-          
-            $stmt->bind_param('ssssdii', $name, $description, $difficulty, $duration, $length, $open, $id);
+            $stmt->bind_param('ssssdiiii', $name, $description, $difficulty, $duration, $length, $open, $dog_friendly, $bike_allowed, $id);
             if ($stmt->execute()) {
                 $conn->commit();
                 echo "<p style='color:green;'>Trail updated successfully.</p>";
@@ -73,15 +69,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-
-$sql = "SELECT TrailID, Name, Description, Difficulty, Duration, Length, Open FROM trail WHERE TrailID = ?";
+$sql = "SELECT TrailID, Name, Description, Difficulty, Duration, Length, Open, DogFriendly, BikeAllowed FROM trail WHERE TrailID = ?";
 $stmt = $conn->stmt_init();
 if (!$stmt->prepare($sql)) {
     echo "<div style='color:red;'>Failed to prepare SQL.</div>";
 } else {
     $stmt->bind_param('i', $id);
     $stmt->execute();
-    $stmt->bind_result($trailID, $name, $description, $difficulty, $duration, $length, $open);
+    $stmt->bind_result($trailID, $name, $description, $difficulty, $duration, $length, $open, $dog_friendly, $bike_allowed);
 
     if ($stmt->fetch()) {
         ?>
@@ -123,10 +118,15 @@ if (!$stmt->prepare($sql)) {
             </p>
 
             <p>
-                <label>
-                    <input type="checkbox" name="Open" <?= $open ? 'checked' : '' ?>>
-                    Open for visitors
-                </label>
+                <label><input type="checkbox" name="Open" <?= $open ? 'checked' : '' ?>> Open for visitors</label>
+            </p>
+
+            <p>
+                <label><input type="checkbox" name="DogFriendly" <?= $dog_friendly ? 'checked' : '' ?>> Dog Friendly</label>
+            </p>
+
+            <p>
+                <label><input type="checkbox" name="BikeAllowed" <?= $bike_allowed ? 'checked' : '' ?>> Bike Allowed</label>
             </p>
 
             <button type="submit">Update Trail</button>
