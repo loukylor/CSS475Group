@@ -1,6 +1,15 @@
 <?php
 require_once 'config.inc.php';
 require_once 'render.php';
+$conn = new mysqli($servername, $username, $password, $database, $port, $socket);
+if ($conn->connect_error) {
+    die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
+}
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'profile') {
+    delete_row_from_db($conn, 'profile', 'Username', $_POST['row_id']);
+    header("Location: " . $_SERVER['REQUEST_URI']);
+    exit();
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -17,16 +26,11 @@ require_once 'render.php';
     <h2>Profile Directory</h2>
     <a href="./insert.php?table=profile">Insert into table</a>
     <?php
-    $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
 
-    if ($conn->connect_error) {
-        die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
-    }
+
 
     $sql = "SELECT Username, Description FROM profile";
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'profile') {
-        delete_row_from_db($conn, 'profile', 'Username', $_POST['row_id']);
-    }
+
     
     $stmt = $conn->prepare($sql);
     $username = $description = null;
