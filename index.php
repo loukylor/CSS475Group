@@ -16,7 +16,7 @@ require_once 'header.inc.php';
 ?>
 <div>
     <h2>About</h2>
-    <div>This is sample PHP program that does simple database operations calling the mysqli library in PHP</div>
+    <div>We're the Hiking Trails Group. Group Members: Saurabh Vasdev, Tyler Ingram, Kyler Li, Addison Douglas</div>
 </div>
 </body>
 </html>
