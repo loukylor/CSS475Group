@@ -29,7 +29,7 @@ require_once 'render.php';
         <input type="checkbox" name="do_sort" <?= (isset($_GET['do_sort']) ? 'checked' : '') ?> />
         <label for="order_by">Order by:</label>
         <select name="order_by">">
-            <option value="User.Username" <?= ($_GET['order_by'] ?? '') === "User.Username" ? 'selected' : '' ?>>Username</option>
+            <option value="user.Username" <?= ($_GET['order_by'] ?? '') === "user.Username" ? 'selected' : '' ?>>Username</option>
             <option value="FirstName" <?= ($_GET['order_by'] ?? '') === "FirstName" ? 'selected' : '' ?>>FirstName</option>
             <option value="LastName" <?= ($_GET['order_by'] ?? '') === "LastName" ? 'selected' : '' ?>>LastName</option>
             <option value="Email" <?= ($_GET['order_by'] ?? '') === "Email" ? 'selected' : '' ?>>Email</option>
@@ -93,6 +93,7 @@ require_once 'render.php';
     if ($types && $params) {
         $stmt->bind_param($types, ...$params);
     }
+    echo $conn->error;
     $stmt->execute();
     $comment_id = $post_id = $username = $description = null;
     render_rows(
