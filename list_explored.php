@@ -22,12 +22,20 @@ require_once 'render.php';
     if ($conn->connect_error) {
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
+    
 
     $sql = "SELECT Username, TrailID FROM explored";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'explored') {
+        delete_composite_row_from_db($conn, 'explored', 'Username|TrailID');
+        // header("Location: " . $_SERVER['REQUEST_URI']);
+        // exit();
+    }
+    
     $stmt = $conn->prepare($sql);
     $stmt->execute();
+    $Username = $TrailID = $Username = $explored = null;
+    
     render_rows(
-        $sql,
         $stmt,
         function ($username, $trail_id) {
             return get_row_title("User: $username") . "<br>" . get_row_sub("Trail ID: $trail_id");

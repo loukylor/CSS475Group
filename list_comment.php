@@ -24,10 +24,16 @@ require_once 'render.php';
     }
 
     $sql = "SELECT CommentID, PostID, Username, Description FROM comment";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'comment') {
+        delete_row_from_db($conn, 'comment', 'CommentID', $_POST['row_id']);
+        // header("Location: " . $_SERVER['REQUEST_URI']);
+        // exit();
+    }
+    
     $stmt = $conn->prepare($sql);
     $stmt->execute();
+    $comment_id = $post_id = $username = $description = null;
     render_rows(
-        $sql,
         $stmt,
         function ($comment_id, $post_id, $username, $description) {
             $editLink = "<a href='update_comment.php?id=" . urlencode($comment_id) . "'>Update</a>";

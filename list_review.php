@@ -1,3 +1,4 @@
+
 <?php
 require_once 'config.inc.php';
 require_once 'render.php';
@@ -24,10 +25,15 @@ require_once 'render.php';
     }
 
     $sql = "SELECT Username, TrailID, Title, Score FROM review";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'review') {
+        delete_composite_row_from_db($conn, 'review', 'Username|TrailID');
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+    
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     render_rows(
-        $sql,
         $stmt,
         function ($username, $trail_id, $title, $score) {
             // URL encode to avoid issues with special chars

@@ -61,6 +61,12 @@ require_once 'render.php';
         $params[] = $post_id;
         $types .= 'i';
     }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'post') {
+        delete_row_from_db($conn, 'post', 'PostID', $_POST['row_id']);
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+    
 
     $stmt = $conn->prepare($sql);
     if ($types && $params) {
@@ -68,8 +74,8 @@ require_once 'render.php';
     }
 
     $stmt->execute();
+    $post_id = $username = $trail_id = $title = null;
     render_rows(
-        $sql,
         $stmt,
         function ($post_id, $username, $trail_id, $title) {
             $content = get_row_title("Post #$post_id — $title") . "<br>" .

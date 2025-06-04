@@ -1,7 +1,6 @@
 <?php
 
 function render_rows(
-    string $sql_query,
     mysqli_stmt $stmt,
     callable $get_row_func,
     string $primary_key_column,
@@ -10,60 +9,52 @@ function render_rows(
     &$bound_var,
     &...$bound_vars
 ): void {
-    // Handle delete request
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === $table_name) {
-        if ($is_composite) {
-            delete_composite_row_from_db($conn, $table_name, $primary_key_column);
-        } else {
-            delete_row_from_db($conn, $table_name, $primary_key_column, $_POST['row_id']);
+    $stmt->execute();
+    $stmt->bind_result($bound_var, ...$bound_vars);
+
+    $rows = [];
+    while ($stmt->fetch()) {
+        $row = [$bound_var];
+        foreach ($bound_vars as $var) {
+            $row[] = $var;
         }
-        // header("Location: " . $_SERVER['REQUEST_URI']);
-        // exit();
+        $rows[] = $row;
     }
 
-    //$stmt = $conn->stmt_init();
+    echo "<ul class='row-list'>";
+    foreach ($rows as $row_data) {
+        $clean_var = htmlspecialchars($row_data[0]);
+        $clean_vars = array_map('htmlspecialchars', array_slice($row_data, 1));
 
-    // if (!$stmt->prepare($sql_query)) {
-    //     render_statement_fail();
-    // } else {
-        //$stmt->execute();
-        $stmt->bind_result($bound_var, ...$bound_vars);
+        $form_fields = "";
+        $row_id = $clean_var;
 
-        echo "<ul class='row-list'>";
-        while ($stmt->fetch()) {
-            $clean_var = htmlspecialchars($bound_var);
-            $clean_vars = array_map('htmlspecialchars', $bound_vars);
+        if ($is_composite && strpos($primary_key_column, '|') !== false) {
+            $key_parts = explode('|', $primary_key_column);
+            $row_id_parts = [];
 
-            $form_fields = "";
-            $row_id = $clean_var;
-
-            // ✅ Handle composite key input generation
-            if ($is_composite && strpos($primary_key_column, '|') !== false) {
-                $key_parts = explode('|', $primary_key_column);
-                $row_id_parts = [];
-
-                foreach ($key_parts as $index => $key_name) {
-                    $field_value = $index === 0 ? $clean_var : $clean_vars[$index - 1];
-                    $row_id_parts[] = $field_value;
-                    $form_fields .= "<input type='hidden' name='" . strtolower($key_name) . "' value='$field_value'>\n";
-                }
-
-                $row_id = implode('|', $row_id_parts); // used for identifying the row
+            foreach ($key_parts as $index => $key_name) {
+                $field_value = htmlspecialchars($row_data[$index]);
+                $row_id_parts[] = $field_value;
+                $form_fields .= "<input type='hidden' name='" . strtolower($key_name) . "' value='$field_value'>\n";
             }
 
-            echo "<li style='display: flex; justify-content: space-between; align-items: center; flex-direction: row;'>
-                <div>" . $get_row_func($clean_var, ...$clean_vars) . "</div>
-                <form method='POST' style='margin-left: 1em;' onsubmit=\"return confirm('Delete this row?');\">
-                    <input type='hidden' name='row_id' value='" . $row_id . "'>
-                    <input type='hidden' name='table' value='" . $table_name . "'>
-                    $form_fields
-                    <button type='submit' class='delete-btn'>Delete</button>
-                </form>
-              </li>";
+            $row_id = implode('|', $row_id_parts);
         }
-        echo "</ul>";
-    //}
+
+        echo "<li style='display: flex; justify-content: space-between; align-items: center; flex-direction: row;'>
+            <div>" . $get_row_func(...$row_data) . "</div>
+            <form method='POST' style='margin-left: 1em;' onsubmit=\"return confirm('Delete this row?');\">
+                <input type='hidden' name='row_id' value='" . $row_id . "'>
+                <input type='hidden' name='table' value='" . $table_name . "'>
+                $form_fields
+                <button type='submit' class='delete-btn'>Delete</button>
+            </form>
+          </li>";
+    }
+    echo "</ul>";
 }
+
 
 
 function delete_composite_row_from_db(mysqli $conn, string $table, string $composite_key): void {

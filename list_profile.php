@@ -24,10 +24,15 @@ require_once 'render.php';
     }
 
     $sql = "SELECT Username, Description FROM profile";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'profile') {
+        delete_row_from_db($conn, 'profile', 'Username', $_POST['row_id']);
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+    
     $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    $username = $description = null;
     render_rows(
-        $sql,
         $stmt,
         function ($username, $description) {
             $editButton = '<a href="update_profile.php?username=' . urlencode($username) . '" style="margin-left:10px;">Update</a>';

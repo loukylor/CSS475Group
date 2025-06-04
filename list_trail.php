@@ -104,14 +104,18 @@ require_once 'render.php';
         $params[] = (int)$location_id;
         $types .= 'i';
     }
-
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'trail') {
+        delete_row_from_db($conn, 'trail', 'TrailID', $_POST['row_id']);
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+    
     $stmt = $conn->prepare($sql);
     if ($types && $params) {
         $stmt->bind_param($types, ...$params);
     }
     $stmt->execute();
     render_rows(
-        $sql,
         $stmt,
         function ($trail_id, $name, $description, $difficulty) {
             $edit_link = "<a href='update_trail.php?id=$trail_id'>Update</a>";

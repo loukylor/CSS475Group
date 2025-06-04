@@ -24,19 +24,27 @@ require_once 'render.php';
     }
 
     $sql = "SELECT ReportID, ReporterUsername, Username, ReviewUsername, ReviewTrailID, CommentID, PostID FROM report";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'report') {
+        delete_row_from_db($conn, 'report', 'ReportID', $_POST['row_id']);
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+    
     $stmt = $conn->prepare($sql);
     $stmt->execute();
+    $report_id = $reporter_username = $username = $review_username = $review_trail_id = $comment_id = $post_id = null;
+
     render_rows(
-        $sql,
         $stmt,
         function ($report_id, $reporter_username, $username, $review_username, $review_trail_id, $comment_id, $post_id) {
-            if ($username !== '') {
+            $sub = "No associated content"; // Default fallback
+            if (!empty($username)) {
                 $sub = "Profile: $username";
-            } elseif ($review_trail_id !== '') {
+            } elseif (!empty($review_trail_id)) {
                 $sub = "Review: $review_username, #$review_trail_id";
-            } elseif ($comment_id !== '') {
+            } elseif (!empty($comment_id)) {
                 $sub = "Comment: #$comment_id";
-            } elseif ($post_id !== '') {
+            } elseif (!empty($post_id)) {
                 $sub = "Post: #$post_id";
             }
             $content = get_row_title("Report #$report_id by $reporter_username") . "<br>" .

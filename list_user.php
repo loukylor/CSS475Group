@@ -72,13 +72,17 @@ require_once 'render.php';
         $params[] = (int)$credibility;
         $types .= "i";
     }
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'user') {
+        delete_row_from_db($conn, 'user', 'Username', $_POST['row_id']);
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
     $stmt = $conn->prepare($sql);
     if (!empty($params)) {
         $stmt->bind_param($types, ...$params);
     }
     $stmt->execute();
     render_rows(
-        $sql,
         $stmt,
         function ($username, $first_name, $last_name, $email, $credibility) {
             $content = get_row_title("User: $username") . "<br>" .

@@ -24,10 +24,16 @@ require_once 'render.php';
     }
 
     $sql = "SELECT ImageURL, Username, PostID, FileSize FROM image";
+    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'image') {
+        delete_row_from_db($conn, 'image', 'ImageURL', $_POST['row_id']);
+        header("Location: " . $_SERVER['REQUEST_URI']);
+        exit();
+    }
+    
+    
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     render_rows(
-        $sql,
         $stmt,
         function ($image_url, $username, $post_id, $file_size) {
             return get_row_title("Image: $image_url") . "<br>" .
