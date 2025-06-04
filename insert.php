@@ -66,7 +66,7 @@ function render_insert_form(mysqli $conn, string $table) {
                 $suffix = ' (YYYY-MM-DD)';
                 break;
             case 'datetime':
-            case 'timetamp':
+            case 'timestamp':
                 $type = 'text';
                 $pattern = '\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}';
                 $suffix = ' (YYYY-MM-DD HH:MM:SS)';
