@@ -42,6 +42,7 @@ function render_insert_form(mysqli $conn, string $table) {
         switch ($col['Type']) {
             case 'int':
             case 'int(11)':
+            case 'smallint(6)':
                 $type = 'number';
                 break;
             case 'float':
@@ -135,6 +136,7 @@ function insert_row(mysqli $conn, string $table) {
         switch ($col['Type']) {
             case 'int':
             case 'int(11)':
+            case 'smallint(6)':
                 $types .= 'i';
                 break;
             case 'bit(1)':
