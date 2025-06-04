@@ -58,7 +58,7 @@ require_once 'render.php';
         <option value="location.Name" <?= ($_GET['order_by'] ?? '') === "location.Name" ? 'selected' : '' ?>>Location Name</option>
         <option value="TrailID" <?= ($_GET['order_by'] ?? '') === "TrailID" ? 'selected' : '' ?>>TrailID</option>
         <option value="Name" <?= ($_GET['order_by'] ?? '') === "Name" ? 'selected' : '' ?>>Name</option>
-        <option value="Description" <?= ($_GET['order_by'] ?? '') === "Description" ? 'selected' : '' ?>>Description</option>
+        <option value="trail.Description" <?= ($_GET['order_by'] ?? '') === "trail.Description" ? 'selected' : '' ?>>Description</option>
         <option value="Difficulty" <?= ($_GET['order_by'] ?? '') === "Difficulty" ? 'selected' : '' ?>>Difficulty</option>
         <option value="BikeAllowed" <?= ($_GET['order_by'] ?? '') === "BikeAllowed" ? 'selected' : '' ?>>BikeAllowed</option>
         <option value="DogFriendly" <?= ($_GET['order_by'] ?? '') === "DogFriendly" ? 'selected' : '' ?>>DogFriendly</option>
@@ -75,7 +75,7 @@ require_once 'render.php';
         <option value="location.Name" <?= ($_GET['agg_attr'] ?? '') === "location.Name" ? 'selected' : '' ?>>Location Name</option>
         <option value="TrailID" <?= ($_GET['agg_attr'] ?? '') === "TrailID" ? 'selected' : '' ?>>TrailID</option>
         <option value="Name" <?= ($_GET['agg_attr'] ?? '') === "Name" ? 'selected' : '' ?>>Name</option>
-        <option value="Description" <?= ($_GET['agg_attr'] ?? '') === "Description" ? 'selected' : '' ?>>Description</option>
+        <option value="trail.Description" <?= ($_GET['agg_attr'] ?? '') === "trail.Description" ? 'selected' : '' ?>>Description</option>
         <option value="Difficulty" <?= ($_GET['agg_attr'] ?? '') === "Difficulty" ? 'selected' : '' ?>>Difficulty</option>
         <option value="BikeAllowed" <?= ($_GET['agg_attr'] ?? '') === "BikeAllowed" ? 'selected' : '' ?>>BikeAllowed</option>
         <option value="DogFriendly" <?= ($_GET['agg_attr'] ?? '') === "DogFriendly" ? 'selected' : '' ?>>DogFriendly</option>
