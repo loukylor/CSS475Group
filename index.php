@@ -7,7 +7,7 @@
 */?>
 <html>
 <head>
-    <title>Sample PHP Database Program</title>
+    <title>Hiking Trail Database</title>
     <link rel="stylesheet" href="base.css">
 </head>
 <body>
