@@ -35,7 +35,7 @@ require_once 'render.php';
             <option value="Email" <?= ($_GET['order_by'] ?? '') === "Email" ? 'selected' : '' ?>>Email</option>
             <option value="Credibility" <?= ($_GET['order_by'] ?? '') === "Credibility" ? 'selected' : '' ?>>Credibility</option>
             <option value="PostCount" <?= ($_GET['order_by'] ?? '') === "PostCount" ? 'selected' : '' ?>>PostCount</option>
-            <option value="report_count.Count" <?= ($_GET['order_by'] ?? '') === "report_count.Count" ? 'selected' : '' ?>>ReportCount</option>
+            <option value="ReportCount" <?= ($_GET['order_by'] ?? '') === "ReportCount" ? 'selected' : '' ?>>ReportCount</option>
         </select>
         <label for="order">Ascending?:</label>
         <input type="checkbox" name="order" <?= (isset($_GET['order']) ? 'checked' : '') ?> />
@@ -74,7 +74,7 @@ require_once 'render.php';
         $types .= 'i';
     }
     if (!empty($reports)) {
-        $after_post_join .= " AND report_count.Count >= ?";
+        $after_post_join .= " AND ReportCount >= ?";
         $params[] = $reports;
         $types .= 'i';
     }
