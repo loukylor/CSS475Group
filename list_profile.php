@@ -24,9 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT Username, Description FROM profile";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($username, $description) {
             $editButton = '<a href="update_profile.php?username=' . urlencode($username) . '" style="margin-left:10px;">Update</a>';
             return get_row_title("Profile: " . htmlspecialchars($username) . " $editButton") . "<br>" . get_row_sub(htmlspecialchars($description));

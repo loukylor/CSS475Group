@@ -396,6 +396,7 @@ CREATE TABLE `report` (
   `ReviewTrailID` int(11) DEFAULT NULL,
   `CommentID` int(11) DEFAULT NULL,
   `PostID` int(11) DEFAULT NULL,
+  `TimeStamp` TimeStamp DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (`ReporterUsername`) REFERENCES `user`(`Username`) ON DELETE CASCADE,
   FOREIGN KEY (`Username`) REFERENCES `profile`(`Username`) ON DELETE CASCADE,
   FOREIGN KEY (`ReviewUsername`, `ReviewTrailID`) REFERENCES `review`(`Username`, `TrailID`) ON DELETE CASCADE,

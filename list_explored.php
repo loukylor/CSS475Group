@@ -24,9 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT Username, TrailID FROM explored";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($username, $trail_id) {
             return get_row_title("User: $username") . "<br>" . get_row_sub("Trail ID: $trail_id");
         },

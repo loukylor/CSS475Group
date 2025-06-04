@@ -24,9 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT Username, TrailID, Title, Score FROM review";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($username, $trail_id, $title, $score) {
             // URL encode to avoid issues with special chars
             $edit_url = "update_review.php?username=" . urlencode($username) . "&trailid=" . urlencode($trail_id);

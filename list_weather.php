@@ -24,9 +24,11 @@ require_once 'render.php';
     }
 
     $sql = "SELECT WeatherID, TrailID, TemperatureF, Conditions, ForDate FROM weather";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
     render_rows(
         $sql,
-        $conn,
+        $stmt,
         function ($weather_id, $trail_id, $temp_f, $conditions, $for_date) {
             return get_row_title("Weather #$weather_id") . "<br>" .
                    get_row_sub("Trail $trail_id, $conditions, $temp_f°F on $for_date");

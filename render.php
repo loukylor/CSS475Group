@@ -2,7 +2,7 @@
 
 function render_rows(
     string $sql_query,
-    mysqli $conn,
+    mysqli_stmt $stmt,
     callable $get_row_func,
     string $primary_key_column,
     string $table_name,
@@ -21,12 +21,12 @@ function render_rows(
         // exit();
     }
 
-    $stmt = $conn->stmt_init();
+    //$stmt = $conn->stmt_init();
 
-    if (!$stmt->prepare($sql_query)) {
-        render_statement_fail();
-    } else {
-        $stmt->execute();
+    // if (!$stmt->prepare($sql_query)) {
+    //     render_statement_fail();
+    // } else {
+        //$stmt->execute();
         $stmt->bind_result($bound_var, ...$bound_vars);
 
         echo "<ul class='row-list'>";
@@ -60,7 +60,7 @@ function render_rows(
                     <button type='submit' class='delete-btn'>Delete</button>
                 </form>
               </li>";
-        }
+        //}
         echo "</ul>";
     }
 }
