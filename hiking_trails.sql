@@ -57,7 +57,6 @@ INSERT INTO `location` (`ParentLocationID`, `Name`, `Description`) VALUES
 (2, 'Lake Tahoe', 'Large freshwater lake in the Sierra Nevada Mountains, straddling California and Nevada'),
 (2, 'Sequoia National Park', 'Home to massive sequoia trees including General Sherman, the largest tree on Earth');
 -- --------------------------------------------------------
-
 --
 -- Table structure for table `user`
 --
@@ -234,13 +233,14 @@ CREATE TABLE `post` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 -- --------------------------------------------------------
 
-INSERT INTO `post` (`Username`, `TrailID`, `Title`, `Description`) VALUES
-('jdoe', 2, 'Morning Hike', 'Enjoyed a refreshing morning walk with beautiful scenery.'),
-('kclark', 5, 'Loved MailBox Trail', 'Loved the hike and it had a great view at the top.'),
-('elliot_b', 6, 'Great Chill Hike', 'A perfect place for some peaceful reflection and nature photos.'),
-('alana_s', 8, 'Rooftop Views', 'The urban views from this trail are spectacular, especially at sunset.'),
-('arthur_c', 7, 'Coastal Breeze', 'Felt the ocean breeze and explored underwater ecosystems along this trail.'),
-('awelch', 1, 'Forest Walk', 'A serene trail that reconnects you with nature and calmness.');
+INSERT INTO `post` (`Username`, `TrailID`, `Title`, `Description`, `PostDate`) VALUES
+('jdoe', 2, 'Morning Hike', 'Enjoyed a refreshing morning walk with beautiful scenery.', '2025-06-01 07:30:00'),
+('kclark', 5, 'Loved MailBox Trail', 'Loved the hike and it had a great view at the top.', '2025-06-01 10:15:00'),
+('elliot_b', 6, 'Great Chill Hike', 'A perfect place for some peaceful reflection and nature photos.', '2025-06-02 09:00:00'),
+('alana_s', 8, 'Rooftop Views', 'The urban views from this trail are spectacular, especially at sunset.', '2025-06-02 19:45:00'),
+('arthur_c', 7, 'Coastal Breeze', 'Felt the ocean breeze and explored underwater ecosystems along this trail.', '2025-06-03 08:10:00'),
+('awelch', 1, 'Forest Walk', 'A serene trail that reconnects you with nature and calmness.', '2025-06-03 16:25:00');
+
 
 -- --------------------------------------------------------
 
