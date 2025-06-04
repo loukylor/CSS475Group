@@ -49,7 +49,7 @@ INSERT INTO `location` (`ParentLocationID`, `Name`, `Description`) VALUES
 (1, 'Gold Bar', 'City in Snohomish County, Washington, known for outdoor activities'),
 (1, 'Mount Rainier National Park', 'National park in Washington centered around Mount Rainier'),
 (2, 'Yosemite National Park', 'Iconic national park in California with giant sequoias and granite cliffs'),
-(2, 'Big Sur', 'Scenic region along California’s Central Coast'),
+(2, 'Big Sur', 'Scenic region along Californias Central Coast'),
 (1, 'Olympic National Park', 'Diverse park on the Olympic Peninsula, featuring mountains, rainforest, and coastline'),
 (1, 'North Cascades National Park', 'Mountainous park in northern Washington with rugged peaks and alpine lakes'),
 (2, 'Redwood National and State Parks', 'Northern California parks with towering redwood trees and coastal views'),
@@ -311,7 +311,7 @@ INSERT INTO `comment` (`PostID`, `Username`, `Description`) VALUES
 (3, 'awelch', 'I also love taking pictures on a hike. Got any to share?'),
 (4, 'arthur_c', 'Great place for reflection. Thanks for the rec!'),
 (5, 'elliot_b', 'Urban trails are underrated. Nice find!'),
-(6, 'jdoe', 'That breeze sounds amazing, I’ll check it out.');
+(6, 'jdoe', 'That breeze sounds amazing, Ill check it out.');
 
 -- --------------------------------------------------------
 
