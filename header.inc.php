@@ -27,5 +27,5 @@
 
 
 </div></div>
-<h1>Sample PHP Database Program</h1>
+<h1>Hiking Trails Database</h1>
 
