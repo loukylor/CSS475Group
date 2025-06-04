@@ -35,11 +35,11 @@ require_once 'render.php';
         <input type="checkbox" name="do_sort" <?= (isset($_GET['do_sort']) ? 'checked' : '') ?> />
         <label for="order_by">Order by:</label>
         <select name="order_by">">
-            <option value="Username" <?= $_GET['order_by'] === "Username" ? 'selected' : '' ?>>Username</option>
-            <option value="FirstName" <?= $_GET['order_by'] === "FirstName" ? 'selected' : '' ?>>FirstName</option>
-            <option value="LastName" <?= $_GET['order_by'] === "LastName" ? 'selected' : '' ?>>LastName</option>
-            <option value="Email" <?= $_GET['order_by'] === "Email" ? 'selected' : '' ?>>Email</option>
-            <option value="Credibility" <?= $_GET['order_by'] === "Credibility" ? 'selected' : '' ?>>Credibility</option>
+            <option value="Username" <?= ($_GET['order_by'] ?? '') === "Username" ? 'selected' : '' ?>>Username</option>
+            <option value="FirstName" <?= ($_GET['order_by'] ?? '') === "FirstName" ? 'selected' : '' ?>>FirstName</option>
+            <option value="LastName" <?= ($_GET['order_by'] ?? '') === "LastName" ? 'selected' : '' ?>>LastName</option>
+            <option value="Email" <?= ($_GET['order_by'] ?? '') === "Email" ? 'selected' : '' ?>>Email</option>
+            <option value="Credibility" <?= ($_GET['order_by'] ?? '') === "Credibility" ? 'selected' : '' ?>>Credibility</option>
         </select>
         <label for="order">Ascending?:</label>
         <input type="checkbox" name="order" <?= (isset($_GET['order']) ? 'checked' : '') ?> />
