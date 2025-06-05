@@ -17,14 +17,14 @@ require_once 'render.php';
     <h2>Explored Directory</h2>
     <a href="./insert.php?table=explored">Insert into table</a>
     <?php
-    $conn = new mysqli($servername, $username, $password, $database, $port, $socket);
+    $conn = new mysqli($servername, $username, $password, $database, $port);
 
     if ($conn->connect_error) {
         die("<p style='color:red;'>Connection failed: " . $conn->connect_error . "</p>");
     }
     
 
-    $sql = "SELECT Username, TrailID FROM explored";
+    $sql = "SELECT Username, TrailID, ExploredAt FROM explored";
     if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['row_id']) && $_POST['table'] === 'explored') {
         delete_composite_row_from_db($conn, 'explored', 'Username|TrailID');
     }
@@ -35,13 +35,13 @@ require_once 'render.php';
     
     render_rows(
         $stmt,
-        function ($username, $trail_id) {
-            return get_row_title("User: $username") . "<br>" . get_row_sub("Trail ID: $trail_id");
+        function ($username, $trail_id, $explored_at) {
+            return get_row_title("User: $username at $explored_at") . "<br>" . get_row_sub("Trail ID: $trail_id");
         },
         "Username|TrailID",      
         "explored",
         true,
-        $username, $trail_id
+        $username, $trail_id, $explored_at
     );
     
     

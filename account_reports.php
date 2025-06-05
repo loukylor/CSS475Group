@@ -22,6 +22,12 @@ require_once 'render.php';
         <input type="number" name="reports" placeholder="Report Threshold" value="<?= htmlspecialchars($_GET['reports'] ?? '') ?>">
         |
         <input type="number" name="date_cutoff" placeholder="Posted in last (days):" value="<?= htmlspecialchars($_GET['date_cutoff'] ?? '') ?>">
+        |
+        <input type="number" name="explore_threshold" placeholder="Explore Threshold" value="<?= htmlspecialchars($_GET['explore_threshold'] ?? '') ?>">
+        |
+        <input type="text" name="explore_date_start" pattern = "\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}" placeholder="After date (YYYY-MM-DD HH:MM:SS)" value="<?= htmlspecialchars($_GET['explore_date_start'] ?? '') ?>">
+        |
+        <input type="text" name="explore_date_end" pattern = "\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}" placeholder="Before date (YYYY-MM-DD HH:MM:SS)" value="<?= htmlspecialchars($_GET['explore_date_end'] ?? '') ?>">
         
         <br>
         
@@ -56,6 +62,9 @@ require_once 'render.php';
     $credibility = $_GET['credibility'] ?? '';
     $reports = $_GET['reports'] ?? '';
     $date_cutoff = $_GET['date_cutoff'] ?? '';
+    $explore_threshold = $_GET['explore_threshold'] ?? '';
+    $explore_date_start = $_GET['explore_date_start'] ?? '';
+    $explore_date_end = $_GET['explore_date_end'] ?? '';
     
     $order = isset($_GET['order']) ? 'ASC' : 'DESC';
     $sort = isset($_GET['do_sort']) ? " ORDER BY {$_GET['order_by']} $order" : '';
@@ -84,10 +93,31 @@ require_once 'render.php';
         array_unshift($params, $date_cutoff);
         $post_join = "JOIN (SELECT * FROM post WHERE post.PostDate > DATE_SUB(NOW(), INTERVAL ? DAY)) as post";
     }
-    $sql = "SELECT COUNT(*) AS PostCount, SUM(report_count.Count) as ReportCount, user.Username, FirstName, LastName, Email, Credibility FROM user"
-        . " RIGHT JOIN profile ON user.Username = profile.Username"
-        . " $post_join ON post.Username = profile.Username"
-        . $after_post_join . ' GROUP BY post.Username ' . $sort . $limit;
+
+    if (!empty($explore_threshold)) {
+        $types .= 'i';
+        $params[] = $explore_threshold;
+        $after_post_join .= ' AND explored_count.Count > ?';
+    } 
+    $explored_join = '';
+    if (!empty($explore_date_start)) {
+        $types = 's' . $types;
+        array_unshift($params, $explore_date_start);
+        $explored_join = ' AND explored.ExploredAt >= ?' . $explored_join;
+    }
+    if (!empty($explore_date_end)) {
+        $types = 's' . $types;
+        array_unshift($params, $explore_date_end);
+        $explored_join = ' AND explored.ExploredAt <= ?' . $explored_join;
+    }
+    $sql = "SELECT COUNT(*) AS PostCount, SUM(report_count.Count) as ReportCount, explored_count.Count,"
+        . " user.Username, FirstName, LastName, Email, Credibility FROM user"
+            . " RIGHT JOIN profile ON user.Username = profile.Username"
+            . " JOIN ("
+                . "SELECT explored.Username, COUNT(*) AS Count FROM explored WHERE 1=1 $explored_join GROUP BY explored.Username"
+            . ") explored_count ON user.Username = explored_count.Username"
+            . " $post_join ON post.Username = profile.Username"
+            . $after_post_join . ' GROUP BY Username ' . $sort . $limit;
 
     $stmt = $conn->prepare($sql);
     if ($types && $params) {
@@ -98,17 +128,17 @@ require_once 'render.php';
     $comment_id = $post_id = $username = $description = null;
     render_rows(
         $stmt,
-        function ($post_count, $report_count, $username, $first_name, $last_name, $email, $credibility) {
+        function ($post_count, $report_count, $explored_count, $username, $first_name, $last_name, $email, $credibility) {
             $report_count ??= 0;
             $content = get_row_title("User: $username") . "<br>" .
-                       get_row_sub("$first_name $last_name | $email | Credibility: $credibility | Recent Posts: $post_count | Report Count: $report_count");
+                       get_row_sub("$first_name $last_name | $email | Credibility: $credibility | Recent Posts: $post_count | Report Count: $report_count | Explored Count: $explored_count");
             $edit_link = "<a href='update_user.php?username=" . urlencode($username) . "' class='edit-link'>Update</a>";
             return $content . "<br>" . $edit_link;
         },
         "Username",
         "user",
         false,
-        $post_count, $report_count, $username, $first_name, $last_name, $email, $credibility
+        $post_count, $report_count, $explored_count, $username, $first_name, $last_name, $email, $credibility
     );
     $conn->close();
     ?>
