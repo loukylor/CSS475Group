@@ -182,7 +182,7 @@ require_once 'render.php';
             "",     // Primary key column
             "trail",       // Table name
             false,         // is_composite = false
-            $location_name, $agg,
+            $location_name, $agg
         );
     } else {
         render_rows(
