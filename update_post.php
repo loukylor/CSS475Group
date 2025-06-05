@@ -62,19 +62,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Fetch current post info
-$sql = "SELECT Username, TrailID, Title, Description FROM post WHERE PostID = ?";
+$sql = "SELECT p.PostID, p.UserName, p.TrailID, t.Name AS TrailName, p.Title, p.Description
+        FROM post p
+        JOIN trail t ON p.TrailID = t.TrailID
+        WHERE p.PostID = ?";
 $stmt = $conn->prepare($sql);
 if ($stmt === false) {
     echo "<p style='color:red;'>Failed to prepare statement.</p>";
 } else {
     $stmt->bind_param('i', $postID);
     $stmt->execute();
-    $stmt->bind_result($username, $trailID, $title, $description);
+    $stmt->bind_result($fetched_post_id, $username, $trail_id, $trail_name, $title, $description);
     if ($stmt->fetch()) {
         ?>
         <form method="post">
             <p><strong>User:</strong> <?= htmlspecialchars($username) ?></p>
-            <p><strong>Trail ID:</strong> <?= htmlspecialchars($trailID) ?></p>
+            <p><strong>Trail:</strong> <?= htmlspecialchars($trail_name) ?> (ID: <?= htmlspecialchars($trail_id) ?>)</p>
             <p>
                 <label>Title:<br>
                     <input type="text" name="Title" maxlength="32" value="<?= htmlspecialchars($title) ?>" required>
@@ -93,6 +96,7 @@ if ($stmt === false) {
     }
     $stmt->close();
 }
+
 
 $conn->close();
 ?>
